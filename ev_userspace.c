@@ -16,9 +16,9 @@ static struct ltt_trace trace_g;
 static struct ltt_trace traces[MAX_USER_EVENTS];
 
 static void userspace_event_start_process(int pass, double clock, int cpu,
-					  union arg_value *args[MAX_ARGS])
+					  void *args)
 {
-	int num = (int)args[0]->i64;
+	int num = (int)get_arg_i64(args, "event_start");
 
 	if (pass == 1) {
 		if (num < (int)(sizeof(traces)/sizeof(traces[0])) && num >= 0)
@@ -32,12 +32,12 @@ static void userspace_event_start_process(int pass, double clock, int cpu,
 		}
 	}
 }
-MODULE2(userspace, event_start, "event_start");
+MODULE2(userspace, event_start);
 
 static void userspace_event_stop_process(int pass, double clock, int cpu,
-					 union arg_value *args[MAX_ARGS])
+					 void *args)
 {
-	int num = (int)args[0]->i64;
+	int num = (int)get_arg_i64(args, "event_stop");
 
 	if (pass == 1) {
 		if (num < (int)(sizeof(traces)/sizeof(traces[0])) && num >= 0)
@@ -51,12 +51,12 @@ static void userspace_event_stop_process(int pass, double clock, int cpu,
 		}
 	}
 }
-MODULE2(userspace, event_stop, "event_stop");
+MODULE2(userspace, event_stop);
 
 static void userspace_message_process(int pass, double clock, int cpu,
-				      union arg_value *args[MAX_ARGS])
+				      void *args)
 {
-	const char * str = args[0]->s;
+	const char * str = get_arg_str(args, "message");
 
 	if (pass == 1)
 		init_trace(&trace_g, TG_PROCESS, 0.1,
@@ -66,4 +66,4 @@ static void userspace_message_process(int pass, double clock, int cpu,
 		emit_trace(&trace_g, (union ltt_value)"%s", str);
 
 }
-MODULE2(userspace, message, "message");
+MODULE2(userspace, message);

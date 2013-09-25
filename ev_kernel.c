@@ -87,13 +87,13 @@ static void update_irq_name(int irq, const char *name)
 }
 
 static void irq_handler_entry_process(int pass, double clock, int cpu,
-				      union arg_value *args[MAX_ARGS])
+				      void *args)
 {
 	int irq;
 	const char *name;
 
-	irq  = (int)args[0]->i64;
-	name = args[1]->s;
+	irq  = (int)get_arg_i64(args, "irq");
+	name = get_arg_str(args, "name");
 
 	/*
 	  INFO("irq_handler_entry: irq %d name '%s'\n", irq, name);
@@ -138,10 +138,10 @@ static void irq_handler_entry_process(int pass, double clock, int cpu,
 		cpu_preempt(clock, cpu);
 	}
 }
-MODULE(irq_handler_entry, "irq", "name");
+MODULE(irq_handler_entry);
 
 static void irq_handler_exit_process(int pass, double clock, int cpu,
-				     union arg_value *args[MAX_ARGS])
+				     void *args)
 {
 	if ((pass == 1) || (irqlevel[cpu] <= 0))
 		return;
@@ -165,12 +165,11 @@ static void init_traces_softirq(int cpu)
 		   "softirq/%d (info)", cpu);
 }
 
-static void softirq_entry_process(int pass, double clock, int cpu,
-				  union arg_value *args[MAX_ARGS])
+static void softirq_entry_process(int pass, double clock, int cpu, void *args)
 {
 	int vec;
 
-	vec = (int)args[0]->i64;
+	vec = (int)get_arg_i64(args, "vec");
 
 	if (pass == 1) {
 		init_traces_softirq(cpu);
@@ -188,10 +187,9 @@ static void softirq_entry_process(int pass, double clock, int cpu,
 
 	softirqstate[cpu] = SOFTIRQS_RUN;
 }
-MODULE(softirq_entry, "vec");
+MODULE(softirq_entry);
 
-static void softirq_exit_process(int pass, double clock, int cpu,
-				 union arg_value *args[MAX_ARGS])
+static void softirq_exit_process(int pass, double clock, int cpu, void *args)
 {
 	if (pass == 1) {
 		init_traces_softirq(cpu);

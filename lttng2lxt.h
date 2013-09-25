@@ -87,36 +87,39 @@ struct parse_result {
 	const char        *values;
 };
 
-#define MAX_ARGS             (8)
+enum arg_type {
+	ARG_I64,
+	ARG_U64,
+	ARG_STR,
+};
 
-union arg_value {
-	uint64_t    u64;
-	int64_t     i64;
-	const char *s;
+struct arg_value {
+	enum arg_type       type;
+	union {
+		uint64_t    u64;
+		int64_t     i64;
+		const char *s;
+	};
 };
 
 struct ltt_module {
 	const char  *name;
-	const char  *args[MAX_ARGS];
-	void       (*process)(int pass, double clock, int cpu_id,
-			      union arg_value *args[MAX_ARGS]);
+	void       (*process)(int pass, double clock, int cpu_id, void *handle);
 } __attribute__((aligned(64)));
 
 #define __str(_x)       #_x
 #define __xstr(_x)      __str(_x)
 #define MODSECT(_n_)    __attribute__((section(__xstr(.data.lttng2lxt.##_n_))))
 
-#define MODULE(_name_, ...)						\
+#define MODULE(_name_)						\
 	MODSECT(1_ ## _name_) struct ltt_module __ ## _name_ = {	\
 		.name    = #_name_,					\
-		.args    = {__VA_ARGS__},				\
 		.process = _name_ ## _process,				\
 	}
 
-#define MODULE2(_n, _sub, ...)						\
+#define MODULE2(_n, _sub)						\
 	MODSECT(1_ ## _n ##_## _sub) struct ltt_module __ ## _n ## _sub = { \
 		.name    = #_n ":" # _sub,				\
-		.args    = {__VA_ARGS__},				\
 		.process = _n ##_## _sub ## _process,			\
 	}
 
@@ -180,6 +183,16 @@ struct ltt_module *find_module_by_name(const char *name);
 
 void write_savefile(const char *name);
 void scan_lttng_trace(const char *name);
+
+void get_arg(void *args, const char *name, struct arg_value *value);
+int64_t get_arg_i64(void *args, const char *name);
+uint64_t get_arg_u64(void *args, const char *name);
+const char *get_arg_str(void *args, const char *name);
+void for_each_arg(void *args,
+		  void (*pfn)(void *cookie,
+			      const char *name,
+			      const struct arg_value *value),
+		  void *cookie);
 
 void set_cpu_idle(double clock, int cpu);
 void set_cpu_running(double clock, int cpu);

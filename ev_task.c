@@ -135,19 +135,19 @@ struct ltt_trace *find_or_add_task_trace(const char *name, int pid, int tgid)
 
 static
 void lttng_statedump_process_state_process(int pass, double clock, int cpu,
-					   union arg_value *args[MAX_ARGS])
+					   void *args)
 {
 	int tid, pid, /*type,*/ mode, status;
 	const char *name;
 	union ltt_value value;
 	struct ltt_trace *tr;
 
-	tid = (int)args[0]->u64;
-	pid = (int)args[1]->u64;
-	name = args[2]->s;
-	/*type = (int)args[3]->u64;*/
-	mode = (int)args[4]->u64;
-	status = (int)args[5]->u64;
+	tid = (int)get_arg_u64(args, "tid");
+	pid = (int)get_arg_u64(args, "pid");
+	name = get_arg_str(args, "name");
+	/*type = (int)get_arg_u64(args, "type");*/
+	mode = (int)get_arg_u64(args, "mode");
+	status = (int)get_arg_u64(args, "status");
 
 	if (pass == 1) {
 		find_or_add_task_trace(name, tid, pid);
@@ -191,11 +191,9 @@ void lttng_statedump_process_state_process(int pass, double clock, int cpu,
 		emit_trace(tr, value);
 	}
 }
-MODULE(lttng_statedump_process_state,
-	"tid", "pid", "name", "type", "mode", "status");
+MODULE(lttng_statedump_process_state);
 
-static void sched_switch_process(int pass, double clock, int cpu,
-				 union arg_value *args[MAX_ARGS])
+static void sched_switch_process(int pass, double clock, int cpu, void *args)
 {
 	int prev_tid, next_tid, prev_state;
 	const char *prev_comm, *next_comm;
@@ -205,11 +203,11 @@ static void sched_switch_process(int pass, double clock, int cpu,
   { 1, "S"} , { 2, "D" }, { 4, "T" }, { 8, "t" }, { 16, "Z" }, { 32, "X" },
   { 64, "x" }, { 128, "W" }) : "R",
 */
-	prev_comm = args[0]->s;
-	prev_tid = (int)args[1]->u64;
-	prev_state = (int)args[2]->u64;
-	next_comm = args[3]->s;
-	next_tid = (int)args[4]->u64;
+	prev_comm = get_arg_str(args, "prev_comm");
+	prev_tid = (int)get_arg_u64(args, "prev_tid");
+	prev_state = (int)get_arg_u64(args, "prev_state");
+	next_comm = get_arg_str(args, "next_comm");
+	next_tid = (int)get_arg_u64(args, "next_tid");
 
 	if (pass == 1) {
 		find_or_add_task_trace(prev_comm, prev_tid, 0/*XXX*/);
@@ -246,18 +244,16 @@ static void sched_switch_process(int pass, double clock, int cpu,
 			set_cpu_running(clock, cpu);
 	}
 }
-MODULE(sched_switch, "prev_comm", "prev_tid", "prev_state", "next_comm",
-	"next_tid");
+MODULE(sched_switch);
 
-static void sched_wakeup_process(int pass, double clock, int cpu,
-				 union arg_value *args[MAX_ARGS])
+static void sched_wakeup_process(int pass, double clock, int cpu, void *args)
 {
 	int tid;
 	const char *comm;
 	struct ltt_trace *tr;
 
-	comm = args[0]->s;
-	tid = (int)args[1]->u64;
+	comm = get_arg_str(args, "comm");
+	tid = (int)get_arg_u64(args, "tid");
 
 	if (pass == 1)
 		find_or_add_task_trace(comm, tid, 0/*XXX*/);
@@ -267,24 +263,24 @@ static void sched_wakeup_process(int pass, double clock, int cpu,
 		emit_trace(tr, (union ltt_value)PROCESS_WAKEUP);
 	}
 }
-MODULE(sched_wakeup, "comm", "tid");
+MODULE(sched_wakeup);
 
 static void sched_wakeup_new_process(int pass, double clock, int cpu,
-				 union arg_value *args[MAX_ARGS])
+				     void *args)
 {
 	sched_wakeup_process(pass, clock, cpu, args);
 }
-MODULE(sched_wakeup_new, "comm", "tid");
+MODULE(sched_wakeup_new);
 
 static void sched_process_wait_process(int pass, double clock, int cpu,
-				       union arg_value *args[MAX_ARGS])
+				       void *args)
 {
 	int tid;
 	const char *comm;
 	struct ltt_trace *tr;
 
-	comm = args[0]->s;
-	tid = (int)args[1]->u64;
+	comm = get_arg_str(args, "comm");
+	tid = (int)get_arg_u64(args, "tid");
 
 	/*FIXME*/
 	if (!tid)
@@ -298,21 +294,21 @@ static void sched_process_wait_process(int pass, double clock, int cpu,
 		emit_trace(tr, (union ltt_value)PROCESS_IDLE);
 	}
 }
-MODULE(sched_process_wait, "comm", "tid");
+MODULE(sched_process_wait);
 
 /*
  * 'sched_process_exit' happens way before the process really exits, track
  * state using 'sched_process_free' instead.
  */
 static void sched_process_free_process(int pass, double clock, int cpu,
-				       union arg_value *args[MAX_ARGS])
+				       void *args)
 {
 	int tid;
 	const char *comm;
 	struct ltt_trace *tr;
 
-	comm = args[0]->s;
-	tid = (int)args[1]->u64;
+	comm = get_arg_str(args, "comm");
+	tid = (int)get_arg_u64(args, "tid");
 
 	if (pass == 1)
 		find_or_add_task_trace(comm, tid, 0);
@@ -322,19 +318,19 @@ static void sched_process_free_process(int pass, double clock, int cpu,
 		emit_trace(tr, (union ltt_value)PROCESS_DEAD);
 	}
 }
-MODULE(sched_process_free, "comm", "tid");
+MODULE(sched_process_free);
 
 static void sched_process_fork_process(int pass, double clock, int cpu,
-				       union arg_value *args[MAX_ARGS])
+				       void *args)
 {
 	int child_tid;
 	const char *child_comm;
 
-	child_comm = args[0]->s;
-	child_tid = (int)args[1]->u64;
+	child_comm = get_arg_str(args, "child_comm");
+	child_tid = (int)get_arg_u64(args, "child_tid");
 /*
 	if (pass == 1)
 		find_or_add_task_trace(child_comm, child_tid, child_tid);
 */
 }
-MODULE(sched_process_fork, "child_comm", "child_tid");
+MODULE(sched_process_fork);

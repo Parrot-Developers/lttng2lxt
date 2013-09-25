@@ -20,82 +20,123 @@
 static struct bt_context *ctx;
 static uint32_t tids;
 
+void get_arg(void *args, const char *name, struct arg_value *value)
+{
+	struct bt_ctf_event *ctf_event = args;
+	const struct bt_definition *scope;
+	const struct bt_definition *def;
+	const struct bt_declaration *decl;
+	enum ctf_type_id type;
+
+	scope = bt_ctf_get_top_level_scope(ctf_event, BT_EVENT_FIELDS);
+	def = bt_ctf_get_field(ctf_event, scope, name);
+	assert(def);
+	decl = bt_ctf_get_decl_from_def(def);
+	assert(decl);
+	type = bt_ctf_field_type(decl);
+
+	switch (type) {
+
+	case CTF_TYPE_INTEGER:
+		if (bt_ctf_get_int_signedness(decl)) {
+			value->i64 = bt_ctf_get_int64(def);
+			value->type = ARG_I64;
+		} else {
+			value->u64 = bt_ctf_get_uint64(def);
+			value->type = ARG_U64;
+		}
+		break;
+
+	case CTF_TYPE_STRING:
+		value->s = bt_ctf_get_string(def);
+		assert(value->s);
+		value->type = ARG_STR;
+		break;
+
+	case CTF_TYPE_ARRAY:
+		value->s = bt_ctf_get_char_array(def);
+		assert(value->s);
+		value->type = ARG_STR;
+		break;
+
+	case CTF_TYPE_STRUCT:
+	case CTF_TYPE_UNTAGGED_VARIANT:
+	case CTF_TYPE_VARIANT:
+	case CTF_TYPE_FLOAT:
+	case CTF_TYPE_ENUM:
+	case CTF_TYPE_SEQUENCE:
+	default:
+		FATAL("unsupported CTF type\n");
+		break;
+	}
+}
+
+void for_each_arg(void *args,
+		  void (*pfn)(void *cookie,
+			      const char *name,
+			      const struct arg_value *value),
+		  void *cookie)
+{
+	int ret;
+	struct bt_ctf_event *ctf_event = args;
+	unsigned int count, i;
+	struct bt_definition const * const *list;
+	struct arg_value value;
+	const char *name;
+	const struct bt_definition *scope;
+
+	scope = bt_ctf_get_top_level_scope(ctf_event, BT_STREAM_PACKET_CONTEXT);
+	assert(scope);
+
+	ret = bt_ctf_get_field_list(ctf_event, scope, &list, &count);
+	assert(ret == 0);
+
+	for (i = 0; i < count; i++) {
+		name = bt_ctf_field_name(list[i]);
+		get_arg(args, name, &value);
+		(*pfn)(cookie, name, &value);
+	}
+}
+
+int64_t get_arg_i64(void *args, const char *name)
+{
+	struct arg_value value;
+	get_arg(args, name, &value);
+	return value.i64;
+}
+
+uint64_t get_arg_u64(void *args, const char *name)
+{
+	struct arg_value value;
+	get_arg(args, name, &value);
+	return value.u64;
+}
+
+const char *get_arg_str(void *args, const char *name)
+{
+	struct arg_value value;
+	get_arg(args, name, &value);
+	return value.s;
+}
+
 static void process_one_event(struct bt_ctf_event *ctf_event, double clock,
 			      struct ltt_module *mod, int pass)
 {
 	int i;
 	const struct bt_definition *scope;
-	const struct bt_declaration *decl;
 	const struct bt_definition *def;
-	enum ctf_type_id type;
-	union arg_value *args[MAX_ARGS];
-	union arg_value values[MAX_ARGS];
 	int cpu_id;
 
 	scope = bt_ctf_get_top_level_scope(ctf_event, BT_STREAM_PACKET_CONTEXT);
 	assert(scope);
-	/*
-	{
-		int ret;
-		unsigned int count;
-		struct bt_definition const * const *list;
-		ret = bt_ctf_get_field_list(ctf_event, scope, &list, &count);
-		assert(ret == 0);
-		INFO("scope:\n");
-		for (i = 0; i < count; i++)
-			INFO("\tfield '%s'\n", bt_ctf_field_name(list[i]));
-		INFO("\n");
-	}
-	*/
 	def = bt_ctf_get_field(ctf_event, scope, "cpu_id");
 	assert(def);
 	cpu_id = (int)bt_ctf_get_uint64(def);
 
-	/* get event required fields */
-	scope = bt_ctf_get_top_level_scope(ctf_event, BT_EVENT_FIELDS);
-
-	for (i = 0; (i < MAX_ARGS) && mod->args[i]; i++) {
-
-		def = bt_ctf_get_field(ctf_event, scope, mod->args[i]);
-		assert(def);
-		decl = bt_ctf_get_decl_from_def(def);
-		assert(decl);
-		type = bt_ctf_field_type(decl);
-
-		switch (type) {
-
-		case CTF_TYPE_INTEGER:
-			if (bt_ctf_get_int_signedness(decl))
-				values[i].i64 = bt_ctf_get_int64(def);
-			else
-				values[i].u64 = bt_ctf_get_uint64(def);
-			break;
-		case CTF_TYPE_STRING:
-			values[i].s = bt_ctf_get_string(def);
-			assert(values[i].s);
-			break;
-		case CTF_TYPE_ARRAY:
-			values[i].s = bt_ctf_get_char_array(def);
-			assert(values[i].s);
-			break;
-
-		case CTF_TYPE_STRUCT:
-		case CTF_TYPE_UNTAGGED_VARIANT:
-		case CTF_TYPE_VARIANT:
-		case CTF_TYPE_FLOAT:
-		case CTF_TYPE_ENUM:
-		case CTF_TYPE_SEQUENCE:
-		default:
-			FATAL("unsupported CTF type\n");
-			break;
-		}
-		args[i] = &values[i];
-	}
-
 	if (pass == 2)
 		emit_clock(clock);
 
-	mod->process(pass, clock, cpu_id, args);
+	mod->process(pass, clock, cpu_id, ctf_event);
 }
 
 static void process_events(struct bt_ctf_iter *iter, int pass)

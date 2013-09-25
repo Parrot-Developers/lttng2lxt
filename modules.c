@@ -42,6 +42,7 @@ void modules_init(void)
 struct ltt_module *find_module_by_name(const char *name)
 {
 	ENTRY entry, *ret;
+	unsigned int i, modcnt;
 
 	entry.key = (char *)name;
 	(void)hsearch_r(entry, FIND, &ret, &table);
