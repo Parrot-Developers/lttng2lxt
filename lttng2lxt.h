@@ -104,7 +104,8 @@ struct arg_value {
 
 struct ltt_module {
 	const char  *name;
-	void       (*process)(int pass, double clock, int cpu_id, void *handle);
+	void       (*process)(const char *modname, int pass, double clock,
+			      int cpu_id, void *args);
 };
 
 #define MODULE(_name_)							\
@@ -175,7 +176,8 @@ void parse_init(void);
 int parse_line(char *line, struct parse_result *res);
 
 struct ltt_module *find_module_by_name(const char *name);
-void register_module(const char *name, void (*process)(int pass,
+void register_module(const char *name, void (*process)(const char *modname,
+						       int pass,
 						       double clock,
 						       int cpu,
 						       void *args));

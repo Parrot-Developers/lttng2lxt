@@ -134,8 +134,8 @@ struct ltt_trace *find_or_add_task_trace(const char *name, int pid, int tgid)
 }
 
 static
-void lttng_statedump_process_state_process(int pass, double clock, int cpu,
-					   void *args)
+void lttng_statedump_process_state_process(const char *modname, int pass,
+					   double clock, int cpu, void *args)
 {
 	int tid, pid, /*type,*/ mode, status;
 	const char *name;
@@ -193,7 +193,8 @@ void lttng_statedump_process_state_process(int pass, double clock, int cpu,
 }
 MODULE(lttng_statedump_process_state);
 
-static void sched_switch_process(int pass, double clock, int cpu, void *args)
+static void sched_switch_process(const char *modname, int pass, double clock,
+				 int cpu, void *args)
 {
 	int prev_tid, next_tid, prev_state;
 	const char *prev_comm, *next_comm;
@@ -246,7 +247,8 @@ static void sched_switch_process(int pass, double clock, int cpu, void *args)
 }
 MODULE(sched_switch);
 
-static void sched_wakeup_process(int pass, double clock, int cpu, void *args)
+static void sched_wakeup_process(const char *modname, int pass, double clock,
+				 int cpu, void *args)
 {
 	int tid;
 	const char *comm;
@@ -265,15 +267,15 @@ static void sched_wakeup_process(int pass, double clock, int cpu, void *args)
 }
 MODULE(sched_wakeup);
 
-static void sched_wakeup_new_process(int pass, double clock, int cpu,
-				     void *args)
+static void sched_wakeup_new_process(const char *modname, int pass,
+				     double clock, int cpu, void *args)
 {
-	sched_wakeup_process(pass, clock, cpu, args);
+	sched_wakeup_process(modname, pass, clock, cpu, args);
 }
 MODULE(sched_wakeup_new);
 
-static void sched_process_wait_process(int pass, double clock, int cpu,
-				       void *args)
+static void sched_process_wait_process(const char *modname, int pass,
+				       double clock, int cpu, void *args)
 {
 	int tid;
 	const char *comm;
@@ -300,8 +302,8 @@ MODULE(sched_process_wait);
  * 'sched_process_exit' happens way before the process really exits, track
  * state using 'sched_process_free' instead.
  */
-static void sched_process_free_process(int pass, double clock, int cpu,
-				       void *args)
+static void sched_process_free_process(const char *modname, int pass,
+				       double clock, int cpu, void *args)
 {
 	int tid;
 	const char *comm;
@@ -320,8 +322,8 @@ static void sched_process_free_process(int pass, double clock, int cpu,
 }
 MODULE(sched_process_free);
 
-static void sched_process_fork_process(int pass, double clock, int cpu,
-				       void *args)
+static void sched_process_fork_process(const char *modname, int pass,
+				       double clock, int cpu, void *args)
 {
 	int child_tid;
 	const char *child_comm;

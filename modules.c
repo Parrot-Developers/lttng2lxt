@@ -28,7 +28,8 @@ struct ltt_module *find_module_by_name(const char *name)
 	return result ? *result : NULL;
 }
 
-void register_module(const char *name, void (*process)(int pass,
+void register_module(const char *name, void (*process)(const char *modname,
+						       int pass,
 						       double clock,
 						       int cpu,
 						       void *args))

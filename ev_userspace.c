@@ -15,8 +15,8 @@
 static struct ltt_trace trace_g;
 static struct ltt_trace traces[MAX_USER_EVENTS];
 
-static void userspace_event_start_process(int pass, double clock, int cpu,
-					  void *args)
+static void userspace_event_start_process(const char *modname, int pass,
+					  double clock, int cpu, void *args)
 {
 	int num = (int)get_arg_i64(args, "event_start");
 
@@ -34,8 +34,8 @@ static void userspace_event_start_process(int pass, double clock, int cpu,
 }
 MODULE2(userspace, event_start);
 
-static void userspace_event_stop_process(int pass, double clock, int cpu,
-					 void *args)
+static void userspace_event_stop_process(const char *modname, int pass,
+					 double clock, int cpu, void *args)
 {
 	int num = (int)get_arg_i64(args, "event_stop");
 
@@ -53,8 +53,8 @@ static void userspace_event_stop_process(int pass, double clock, int cpu,
 }
 MODULE2(userspace, event_stop);
 
-static void userspace_message_process(int pass, double clock, int cpu,
-				      void *args)
+static void userspace_message_process(const char *modname, int pass,
+				      double clock, int cpu, void *args)
 {
 	const char * str = get_arg_str(args, "message");
 

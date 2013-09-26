@@ -141,7 +141,7 @@ static void process_one_event(struct bt_ctf_event *ctf_event, double clock,
 	if (pass == 2)
 		emit_clock(clock);
 
-	mod->process(pass, clock, cpu_id, ctf_event);
+	mod->process(mod->name, pass, clock, cpu_id, ctf_event);
 }
 
 static void process_events(struct bt_ctf_iter *iter, int pass)

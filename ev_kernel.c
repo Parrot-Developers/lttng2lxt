@@ -86,8 +86,8 @@ static void update_irq_name(int irq, const char *name)
 	}
 }
 
-static void irq_handler_entry_process(int pass, double clock, int cpu,
-				      void *args)
+static void irq_handler_entry_process(const char *modname, int pass,
+				      double clock, int cpu, void *args)
 {
 	int irq;
 	const char *name;
@@ -140,8 +140,8 @@ static void irq_handler_entry_process(int pass, double clock, int cpu,
 }
 MODULE(irq_handler_entry);
 
-static void irq_handler_exit_process(int pass, double clock, int cpu,
-				     void *args)
+static void irq_handler_exit_process(const char *modname, int pass,
+				     double clock, int cpu, void *args)
 {
 	if ((pass == 1) || (irqlevel[cpu] <= 0))
 		return;
@@ -165,7 +165,8 @@ static void init_traces_softirq(int cpu)
 		   "softirq/%d (info)", cpu);
 }
 
-static void softirq_entry_process(int pass, double clock, int cpu, void *args)
+static void softirq_entry_process(const char *modname, int pass, double clock,
+				  int cpu, void *args)
 {
 	int vec;
 
@@ -189,7 +190,8 @@ static void softirq_entry_process(int pass, double clock, int cpu, void *args)
 }
 MODULE(softirq_entry);
 
-static void softirq_exit_process(int pass, double clock, int cpu, void *args)
+static void softirq_exit_process(const char *modname, int pass, double clock,
+				 int cpu, void *args)
 {
 	if (pass == 1) {
 		init_traces_softirq(cpu);
