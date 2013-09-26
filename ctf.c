@@ -131,7 +131,12 @@ static void process_one_event(struct bt_ctf_event *ctf_event, double clock,
 	assert(scope);
 	def = bt_ctf_get_field(ctf_event, scope, "cpu_id");
 	assert(def);
+
 	cpu_id = (int)bt_ctf_get_uint64(def);
+	if (cpu_id >= MAX_CPU) {
+		DIAG("dropping event with cpu_id = %d\n", cpu_id);
+		return;
+	}
 
 	if (pass == 2)
 		emit_clock(clock);

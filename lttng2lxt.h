@@ -111,7 +111,7 @@ struct ltt_module {
 #define __xstr(_x)      __str(_x)
 #define MODSECT(_n_)    __attribute__((section(__xstr(.data.lttng2lxt.##_n_))))
 
-#define MODULE(_name_)						\
+#define MODULE(_name_)							\
 	MODSECT(1_ ## _name_) struct ltt_module __ ## _name_ = {	\
 		.name    = #_name_,					\
 		.process = _name_ ## _process,				\
