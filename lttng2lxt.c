@@ -12,7 +12,7 @@
 
 int verbose;
 int diag;
-int gtkwave_parrot;
+int gtkwave_parrot = 1;
 
 static void link_gtkw_file(const char *tracefile, const char *savefile)
 {
@@ -83,7 +83,6 @@ int main(int argc, char *argv[])
 		assert(ret > 0);
 	}
 
-	modules_init();
 	save_dump_init(lxtfile);
 
 	/* do the actual work */
@@ -101,5 +100,6 @@ int main(int argc, char *argv[])
 		free(savefile);
 	}
 
+	unregister_modules();
 	return 0;
 }

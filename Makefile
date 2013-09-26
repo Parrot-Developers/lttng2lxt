@@ -17,7 +17,7 @@ all: $(PROGRAM)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(PROGRAM) : $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS) -Wl,--sort-section,name
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 clean:
 	-rm -f $(OBJS) $(PROGRAM) *~

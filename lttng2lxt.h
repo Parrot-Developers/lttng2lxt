@@ -105,22 +105,18 @@ struct arg_value {
 struct ltt_module {
 	const char  *name;
 	void       (*process)(int pass, double clock, int cpu_id, void *handle);
-} __attribute__((aligned(64)));
-
-#define __str(_x)       #_x
-#define __xstr(_x)      __str(_x)
-#define MODSECT(_n_)    __attribute__((section(__xstr(.data.lttng2lxt.##_n_))))
+};
 
 #define MODULE(_name_)							\
-	MODSECT(1_ ## _name_) struct ltt_module __ ## _name_ = {	\
-		.name    = #_name_,					\
-		.process = _name_ ## _process,				\
+	static __attribute__((constructor)) void __r_ ## _name_(void)	\
+	{								\
+		register_module(#_name_, _name_ ## _process);		\
 	}
 
-#define MODULE2(_n, _sub)						\
-	MODSECT(1_ ## _n ##_## _sub) struct ltt_module __ ## _n ## _sub = { \
-		.name    = #_n ":" # _sub,				\
-		.process = _n ##_## _sub ## _process,			\
+#define MODULE2(_n, _s)							\
+	static __attribute__((constructor)) void __r_ ## _n ## _s(void) \
+	{								\
+		register_module(#_n ":" #_s, _n ##_## _s ## _process);	\
 	}
 
 #define FATAL(_fmt, args...)				\
@@ -178,8 +174,12 @@ struct ltt_trace *find_task_trace(int pid);
 void parse_init(void);
 int parse_line(char *line, struct parse_result *res);
 
-void modules_init(void);
 struct ltt_module *find_module_by_name(const char *name);
+void register_module(const char *name, void (*process)(int pass,
+						       double clock,
+						       int cpu,
+						       void *args));
+void unregister_modules(void);
 
 void write_savefile(const char *name);
 void scan_lttng_trace(const char *name);

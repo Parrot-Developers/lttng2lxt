@@ -10,45 +10,40 @@
 
 #include "lttng2lxt.h"
 
-static struct ltt_module __modules_begin MODSECT(0);
-static struct ltt_module __modules_end   MODSECT(2);
-static struct ltt_module *modtab = &__modules_begin+1;
-static struct hsearch_data table;
+static void *modules_root;
 
-void modules_init(void)
+static int compar(const void *a, const void *b)
 {
-	unsigned int i, modcnt;
-	int status;
-	ENTRY entry, *ret;
-
-	status = hcreate_r(100, &table);
-	assert(status);
-
-	modcnt = &__modules_end-&__modules_begin-1;
-	INFO("modules (%d):", modcnt);
-
-	for (i = 0; i < modcnt; i++) {
-		entry.key = (char *)modtab[i].name;
-		entry.data = &modtab[i];
-		status = hsearch_r(entry, ENTER, &ret, &table);
-		assert(status);
-		if (verbose)
-			fprintf(stderr, " %s", modtab[i].name);
-	}
-	if (verbose)
-		fprintf(stderr, "\n");
+	const struct ltt_module *ma = a;
+	const struct ltt_module *mb = b;
+	return strcmp(ma->name, mb->name);
 }
 
 struct ltt_module *find_module_by_name(const char *name)
 {
-	ENTRY entry, *ret;
-	unsigned int i, modcnt;
+	struct ltt_module module = {.name = name}, **result;
 
-	entry.key = (char *)name;
-	(void)hsearch_r(entry, FIND, &ret, &table);
-	if (ret)
-		return ret->data;
+	result = tfind(&module, &modules_root, compar);
 
-	/*INFO("no support for %s\n", name);*/ /*XXX*/
-	return NULL;
+	return result ? *result : NULL;
+}
+
+void register_module(const char *name, void (*process)(int pass,
+						       double clock,
+						       int cpu,
+						       void *args))
+{
+	struct ltt_module *module;
+
+	module = malloc(sizeof(*module));
+	if (module) {
+		module->name = name;
+		module->process = process;
+		tsearch(module, &modules_root, compar);
+	}
+}
+
+void unregister_modules(void)
+{
+	tdestroy(modules_root, free);
 }
