@@ -34,7 +34,7 @@ static void dump_syscall_arg(void *cookie, const char *name,
 
 	switch (value->type) {
 	case ARG_I64:
-		if (value->i64 >= 1000000)
+		if (value->i64 >= 1000000 || value->i64 <= -1000000)
 			snprintf(p, rlen, "%s=0x%08llx", name,
 				 (uint64_t)value->i64);
 		else
