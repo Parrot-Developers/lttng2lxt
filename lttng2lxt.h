@@ -24,6 +24,7 @@
 #include <regex.h>
 #include <getopt.h>
 #include <search.h>
+#include <fnmatch.h>
 
 enum {
 	TRACE_SYM_F_BITS,
@@ -51,10 +52,17 @@ enum {
 #define MAX_CPU                   (4)
 #define MAX_IRQS                  (1024)
 
+#define PROCESS_IDLE              LT_IDLE
+#define PROCESS_KERNEL            (gtkwave_parrot ? LT_S0 : LT_1)
+#define PROCESS_USER              (gtkwave_parrot ? LT_S1 : LT_S0)
+#define PROCESS_WAKEUP            (gtkwave_parrot ? LT_S2 : LT_0)
+#define PROCESS_DEAD              LT_0
+
 enum trace_group {
 	TG_NONE,
 	TG_IRQ,
 	TG_MM,
+	TG_GLOBAL,
 	TG_PROCESS,
 };
 
@@ -85,6 +93,14 @@ struct parse_result {
 	const char        *pname;
 	const char        *mode;
 	const char        *values;
+};
+
+struct task {
+	int                pid;
+	int                tgid;
+	struct ltt_trace  *state_trace;
+	struct ltt_trace  *info_trace;
+	const char        *mode;
 };
 
 enum arg_type {
@@ -118,6 +134,12 @@ struct ltt_module {
 	static __attribute__((constructor)) void __r_ ## _n ## _s(void) \
 	{								\
 		register_module(#_n ":" #_s, _n ##_## _s ## _process);	\
+	}
+
+#define MODULE_PATTERN(_name_, _pattern_)				\
+	static __attribute__((constructor)) void __r_ ## _name_(void)	\
+	{								\
+		register_module(#_pattern_, _name_ ## _process);	\
 	}
 
 #define FATAL(_fmt, args...)				\
@@ -171,11 +193,12 @@ void save_dump_close(void);
 
 struct ltt_trace *find_or_add_task_trace(const char *name, int pid, int tgid);
 struct ltt_trace *find_task_trace(int pid);
+struct task *get_current_task(int cpu);
 
 void parse_init(void);
 int parse_line(char *line, struct parse_result *res);
 
-struct ltt_module *find_module_by_name(const char *name);
+const struct ltt_module *find_module_by_name(const char *name);
 void register_module(const char *name, void (*process)(const char *modname,
 						       int pass,
 						       double clock,
@@ -186,7 +209,7 @@ void unregister_modules(void);
 void write_savefile(const char *name);
 void scan_lttng_trace(const char *name);
 
-void get_arg(void *args, const char *name, struct arg_value *value);
+int get_arg(void *args, const char *name, struct arg_value *value);
 int64_t get_arg_i64(void *args, const char *name);
 uint64_t get_arg_u64(void *args, const char *name);
 const char *get_arg_str(void *args, const char *name);

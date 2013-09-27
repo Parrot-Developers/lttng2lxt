@@ -20,8 +20,9 @@
 static struct bt_context *ctx;
 static uint32_t tids;
 
-void get_arg(void *args, const char *name, struct arg_value *value)
+int get_arg(void *args, const char *name, struct arg_value *value)
 {
+	int ret = 0;
 	struct bt_ctf_event *ctf_event = args;
 	const struct bt_definition *scope;
 	const struct bt_definition *def;
@@ -55,7 +56,10 @@ void get_arg(void *args, const char *name, struct arg_value *value)
 
 	case CTF_TYPE_ARRAY:
 		value->s = bt_ctf_get_char_array(def);
-		assert(value->s);
+		if (!value->s) {
+			ret = -1;
+			break;
+		}
 		value->type = ARG_STR;
 		break;
 
@@ -66,9 +70,11 @@ void get_arg(void *args, const char *name, struct arg_value *value)
 	case CTF_TYPE_ENUM:
 	case CTF_TYPE_SEQUENCE:
 	default:
-		FATAL("unsupported CTF type\n");
+		DIAG("field '%s' has unsupported CTF type %d\n", name, type);
+		ret = -1;
 		break;
 	}
+	return ret;
 }
 
 void for_each_arg(void *args,
@@ -85,44 +91,43 @@ void for_each_arg(void *args,
 	const char *name;
 	const struct bt_definition *scope;
 
-	scope = bt_ctf_get_top_level_scope(ctf_event, BT_STREAM_PACKET_CONTEXT);
+	scope = bt_ctf_get_top_level_scope(ctf_event, BT_EVENT_FIELDS);
 	assert(scope);
-
 	ret = bt_ctf_get_field_list(ctf_event, scope, &list, &count);
 	assert(ret == 0);
 
 	for (i = 0; i < count; i++) {
 		name = bt_ctf_field_name(list[i]);
-		get_arg(args, name, &value);
-		(*pfn)(cookie, name, &value);
+		if (get_arg(args, name, &value) == 0)
+			(*pfn)(cookie, name, &value);
 	}
 }
 
 int64_t get_arg_i64(void *args, const char *name)
 {
 	struct arg_value value;
-	get_arg(args, name, &value);
+	(void)get_arg(args, name, &value);
 	return value.i64;
 }
 
 uint64_t get_arg_u64(void *args, const char *name)
 {
 	struct arg_value value;
-	get_arg(args, name, &value);
+	(void)get_arg(args, name, &value);
 	return value.u64;
 }
 
 const char *get_arg_str(void *args, const char *name)
 {
 	struct arg_value value;
-	get_arg(args, name, &value);
+	(void)get_arg(args, name, &value);
 	return value.s;
 }
 
 static void process_one_event(struct bt_ctf_event *ctf_event, double clock,
-			      struct ltt_module *mod, int pass)
+			      const struct ltt_module *mod, const char *name,
+			      int pass)
 {
-	int i;
 	const struct bt_definition *scope;
 	const struct bt_definition *def;
 	int cpu_id;
@@ -141,7 +146,7 @@ static void process_one_event(struct bt_ctf_event *ctf_event, double clock,
 	if (pass == 2)
 		emit_clock(clock);
 
-	mod->process(mod->name, pass, clock, cpu_id, ctf_event);
+	mod->process(name, pass, clock, cpu_id, ctf_event);
 }
 
 static void process_events(struct bt_ctf_iter *iter, int pass)
@@ -150,7 +155,7 @@ static void process_events(struct bt_ctf_iter *iter, int pass)
 	double clock;
 	const char *name;
 	struct bt_ctf_event *ctf_event;
-	struct ltt_module *mod;
+	const struct ltt_module *mod;
 
 	while ((ctf_event = bt_ctf_iter_read_event(iter))) {
 		name = bt_ctf_event_name(ctf_event);
@@ -158,7 +163,7 @@ static void process_events(struct bt_ctf_iter *iter, int pass)
 		if (mod) {
 			clock = (double)bt_ctf_get_timestamp(ctf_event)/
 				1000000000.0;
-			process_one_event(ctf_event, clock, mod, pass);
+			process_one_event(ctf_event, clock, mod, name, pass);
 		}
 		ret = bt_iter_next(bt_ctf_get_iter(iter));
 		if (ret < 0)

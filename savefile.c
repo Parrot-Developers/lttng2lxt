@@ -99,6 +99,7 @@ void write_savefile(const char *name)
 
 	print_group(TG_IRQ, "Interrupts", fp, tab);
 	print_group(TG_MM, "Memory Management", fp, tab);
+	print_group(TG_GLOBAL, "Global information", fp, tab);
 	print_group(TG_PROCESS, "Processes", fp, tab);
 
 	free(tab);
