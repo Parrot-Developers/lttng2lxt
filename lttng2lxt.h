@@ -101,6 +101,7 @@ struct task {
 	struct ltt_trace  *state_trace;
 	struct ltt_trace  *info_trace;
 	const char        *mode;
+	char              *name;
 };
 
 enum arg_type {
@@ -191,9 +192,8 @@ void emit_clock(double clock);
 void save_dump_init(const char *name);
 void save_dump_close(void);
 
-struct ltt_trace *find_or_add_task_trace(const char *name, int pid, int tgid);
-struct ltt_trace *find_task_trace(int pid);
 struct task *get_current_task(int cpu);
+struct task *find_or_add_task(const char *comm, int pid);
 
 void parse_init(void);
 int parse_line(char *line, struct parse_result *res);

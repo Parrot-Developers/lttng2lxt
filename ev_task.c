@@ -12,7 +12,7 @@
 #include "lttng.h"
 
 #define PROCESS_STATE       "proc.state.[%d-%d] %s"
-#define PROCESS_INFO        "proc.sys.[%d-%d] %s (info)"
+#define PROCESS_INFO        "proc.info.[%d-%d] %s (info)"
 
 static void *root;
 static struct task *current_task[MAX_CPU];
@@ -35,36 +35,91 @@ static int compare(const void *pa, const void *pb)
 	return 0;
 }
 
-static void update_task_tgid(int pid, int tgid)
+static void update_task(struct task *task, const char *name, int pid, int tgid)
 {
-	struct task task, *ret;
+	int need_refresh = 0;
 
-	task.pid = pid;
-	ret = tfind(&task, &root, compare);
-	if (ret) {
-		ret = *((void **)ret);
-		ret->tgid = tgid;
+	if (name && strcmp(name, task->name)) {
+		free(task->name);
+		task->name = strdup(name);
+		need_refresh = 1;
+	}
+	if (pid && (pid != task->pid)) {
+		task->pid = pid;
+		need_refresh = 1;
+	}
+
+	if (tgid && (tgid != task->tgid)) {
+		task->tgid = tgid;
+		need_refresh = 1;
+	}
+
+	/* refresh trace name if necessary */
+	if (need_refresh) {
+		refresh_name(task->state_trace, PROCESS_STATE, task->tgid,
+			     task->pid, task->name);
+		refresh_name(task->info_trace, PROCESS_INFO, task->tgid,
+			     task->pid, task->name);
 	}
 }
 
-static struct task *find_or_add_task(const char *name, int pid, int tgid)
+static struct task *new_task(const char *name, int pid)
+{
+	struct task *task;
+	struct ltt_trace *data;
+
+	/* this can happen if we on the first cs from this process */
+	if (!name)
+		name = "????";
+
+	data = calloc(2, sizeof(struct ltt_trace));
+	assert(data);
+
+	task = malloc(sizeof(struct task));
+	assert(task);
+
+	task->name = strdup(name);
+	task->pid = pid;
+	/* tgid will be updated later */
+	task->tgid = 0;
+	task->state_trace = &data[0];
+	task->info_trace  = &data[1];
+	task->mode = PROCESS_KERNEL;
+
+	init_trace(task->state_trace, TG_PROCESS,
+		   1.0 + (task->tgid << 16) + task->pid,
+		   TRACE_SYM_F_BITS, PROCESS_STATE, task->tgid, task->pid,
+		   task->name);
+
+	init_trace(task->info_trace, /*TG_PROCESS*/0,
+		   1.1 + (task->tgid << 16) + task->pid,
+		   TRACE_SYM_F_STRING, PROCESS_INFO, task->tgid,
+		   task->pid, task->name);
+
+	/* add new task to tree */
+	task = tsearch(task, &root, compare);
+	assert(task);
+	task = *((void **)task);
+
+	return task;
+}
+
+struct task *find_or_add_task(const char *name, int pid)
 {
 	int cpu;
 	struct task task, *ret;
-	struct ltt_trace *data;
 	char buf[32];
 
 	task.pid = pid;
 	ret = tfind(&task, &root, compare);
 
 	if (name) {
+		/* show 'idle thread' instead of 'swapper' */
 		if (strcmp(name, "swapper") == 0) {
 			name = "idle thread";
-			tgid = 0;
 		} else if (sscanf(name, "swapper/%d", &cpu) == 1) {
 			snprintf(buf, sizeof(buf), "idle/%d thread", cpu);
 			name = buf;
-			tgid = 0;
 		} else {
 			snprintf(buf, sizeof(buf), "%s", name);
 			symbol_clean_name(buf);
@@ -73,56 +128,13 @@ static struct task *find_or_add_task(const char *name, int pid, int tgid)
 	}
 
 	if (!ret) {
-		/* this can happen if we on the first cs from this process */
-		if (!name)
-			name = "????";
-
-		data = calloc(2, sizeof(struct ltt_trace));
-		assert(data);
-
-		ret = malloc(sizeof(struct task));
-		assert(ret);
-
-		ret->pid = pid;
-		ret->tgid = tgid;
-		ret->state_trace = &data[0];
-		ret->info_trace  = &data[1];
-		ret->mode = PROCESS_KERNEL;
-		ret = tsearch(ret, &root, compare);
-		assert(ret);
+		ret = new_task(name, pid);
+	} else {
 		ret = *((void **)ret);
-
-		init_trace(ret->state_trace, TG_PROCESS, 1.0 + (tgid<<16) + pid,
-			   TRACE_SYM_F_BITS, PROCESS_STATE, tgid, pid, name);
-
-		init_trace(ret->info_trace, /*TG_PROCESS*/0,
-			   1.1 + (tgid<<16) + pid,
-			   TRACE_SYM_F_STRING, PROCESS_INFO, tgid, pid, name);
-
-	} else if ((strcmp(name, "no name") != 0) &&
-		   (strcmp(name, "kthreadd") != 0) /* XXX */) {
-
-		ret = *((void **)ret);
-		if ((tgid == 0) && (ret->tgid != 0))
-			tgid = ret->tgid;
-		ret->tgid = tgid;
-		refresh_name(ret->state_trace, PROCESS_STATE, tgid, pid, name);
-		refresh_name(ret->info_trace, PROCESS_INFO, tgid, pid, name);
+		if (name)
+			/* just refresh task name */
+			update_task(ret, name, 0, 0);
 	}
-	return ret;
-}
-
-struct task *find_task(int pid)
-{
-	struct task *ret, task = {.pid = pid};
-
-	ret = tfind(&task, &root, compare);
-	/* XXX big hack; this should be removed we use alias to track name */
-	if (ret == NULL)
-		ret = find_or_add_task(NULL, pid, 0);
-	else
-		ret = *((void **)ret);
-	assert(ret);
 	return ret;
 }
 
@@ -136,19 +148,20 @@ void lttng_statedump_process_state_process(const char *modname, int pass,
 	struct task *task;
 
 	tid = (int)get_arg_u64(args, "tid");
-	pid = (int)get_arg_u64(args, "pid");
-	name = get_arg_str(args, "name");
-	/*type = (int)get_arg_u64(args, "type");*/
-	mode = (int)get_arg_u64(args, "mode");
-	status = (int)get_arg_u64(args, "status");
 
 	if (pass == 1) {
-		find_or_add_task(name, tid, pid);
-		update_task_tgid(tid, pid);
+		name = get_arg_str(args, "name");
+		pid = (int)get_arg_u64(args, "pid");
+		task = find_or_add_task(name, tid);
+		/* set tgid */
+		update_task(task, NULL, 0, pid);
 	}
 
 	if (pass == 2) {
-		task = find_task(tid);
+		/*type = (int)get_arg_u64(args, "type");*/
+		mode = (int)get_arg_u64(args, "mode");
+		status = (int)get_arg_u64(args, "status");
+		task = find_or_add_task(NULL, tid);
 
 		switch (status) {
 		case LTTNG_WAIT_FORK:
@@ -200,12 +213,12 @@ static void sched_switch_process(const char *modname, int pass, double clock,
 	next_tid = (int)get_arg_u64(args, "next_tid");
 
 	if (pass == 1) {
-		find_or_add_task(prev_comm, prev_tid, 0/*XXX*/);
-		find_or_add_task(next_comm, next_tid, 0/*XXX*/);
+		find_or_add_task(prev_comm, prev_tid);
+		find_or_add_task(next_comm, next_tid);
 	}
 
 	if (pass == 2) {
-		task = find_task(prev_tid);
+		task = find_or_add_task(NULL, prev_tid);
 
 		/* restore idle state only if prev process is not dead */
 		if (!(prev_state & 0x70 /*XXX*/))
@@ -219,7 +232,7 @@ static void sched_switch_process(const char *modname, int pass, double clock,
 			set_cpu_idle(clock, cpu);
 
 		/* emit state of newly scheduled task */
-		task = find_task(next_tid);
+		task = find_or_add_task(NULL, next_tid);
 		emit_trace(task->state_trace, (union ltt_value)task->mode);
 		current_task[cpu] = task;
 
@@ -236,14 +249,15 @@ static void sched_wakeup_process(const char *modname, int pass, double clock,
 	const char *comm;
 	struct task *task;
 
-	comm = get_arg_str(args, "comm");
 	tid = (int)get_arg_u64(args, "tid");
 
-	if (pass == 1)
-		find_or_add_task(comm, tid, 0/*XXX*/);
+	if (pass == 1) {
+		comm = get_arg_str(args, "comm");
+		find_or_add_task(comm, tid);
+	}
 
 	if (pass == 2) {
-		task = find_task(tid);
+		task = find_or_add_task(NULL, tid);
 		emit_trace(task->state_trace, (union ltt_value)PROCESS_WAKEUP);
 	}
 }
@@ -263,18 +277,19 @@ static void sched_process_wait_process(const char *modname, int pass,
 	const char *comm;
 	struct task *task;
 
-	comm = get_arg_str(args, "comm");
 	tid = (int)get_arg_u64(args, "tid");
 
-	/*FIXME*/
+	/* why is tid == 0 on some sched_process_wait events ? */
 	if (!tid)
 		return;
 
-	if (pass == 1)
-		find_or_add_task(comm, tid, 0);
+	if (pass == 1) {
+		comm = get_arg_str(args, "comm");
+		find_or_add_task(comm, tid);
+	}
 
 	if (pass == 2) {
-		task = find_task(tid);
+		task = find_or_add_task(NULL, tid);
 		emit_trace(task->state_trace, (union ltt_value)PROCESS_IDLE);
 	}
 }
@@ -291,31 +306,96 @@ static void sched_process_free_process(const char *modname, int pass,
 	const char *comm;
 	struct task *task;
 
-	comm = get_arg_str(args, "comm");
 	tid = (int)get_arg_u64(args, "tid");
 
-	if (pass == 1)
-		find_or_add_task(comm, tid, 0);
+	if (pass == 1) {
+		comm = get_arg_str(args, "comm");
+		find_or_add_task(comm, tid);
+	}
 
 	if (pass == 2) {
-		task = find_task(tid);
+		task = find_or_add_task(NULL, tid);
 		emit_trace(task->state_trace, (union ltt_value)PROCESS_DEAD);
 	}
 }
 MODULE(sched_process_free);
 
+static struct ltt_trace sched_fork[MAX_CPU];
+
 static void sched_process_fork_process(const char *modname, int pass,
 				       double clock, int cpu, void *args)
 {
-/*
-	int child_tid;
-	const char *child_comm;
-
-	child_comm = get_arg_str(args, "child_comm");
-	child_tid = (int)get_arg_u64(args, "child_tid");
+	const char *parent_comm;
+	int parent_tid, child_tid;
 
 	if (pass == 1)
-		find_or_add_task(child_comm, child_tid, child_tid);
-*/
+		init_trace(&sched_fork[cpu], TG_GLOBAL, 1.0+0.1*cpu,
+			   TRACE_SYM_F_STRING, "fork/%d", cpu);
+
+	if (pass == 2) {
+		parent_comm = get_arg_str(args, "parent_comm");
+		parent_tid = (int)get_arg_u64(args, "parent_tid");
+		child_tid = (int)get_arg_u64(args, "child_tid");
+
+		emit_trace(&sched_fork[cpu], (union ltt_value)"[%d] %s -> [%d]",
+			   parent_tid, parent_comm, child_tid);
+	}
 }
 MODULE(sched_process_fork);
+
+static void sched_process_exec_process(const char *modname, int pass,
+				       double clock, int cpu, void *args)
+{
+	int pid;
+	struct task *task;
+
+	if (pass == 1) {
+		pid = (int)get_arg_u64(args, "pid");
+		task = find_or_add_task(NULL, pid);
+		/* after exec we know this task's tgid */
+		update_task(task, NULL, 0, pid);
+	}
+}
+MODULE(sched_process_exec);
+
+static void sched_migrate_task_process(const char *modname, int pass,
+				       double clock, int cpu, void *args)
+{
+	const char *comm;
+	struct task *task;
+	int orig_cpu, dest_cpu, tid;
+
+	tid = (int)get_arg_u64(args, "tid");
+
+	if (pass == 1) {
+		comm = get_arg_str(args, "comm");
+		(void)find_or_add_task(comm, tid);
+	}
+
+	if (pass == 2) {
+		orig_cpu = (int)get_arg_u64(args, "orig_cpu");
+		dest_cpu = (int)get_arg_u64(args, "dest_cpu");
+
+		task = find_or_add_task(NULL, tid);
+		if (task) {
+			emit_trace(task->info_trace,
+				   (union ltt_value)"cpu%d->cpu%d",
+				   orig_cpu, dest_cpu);
+		}
+	}
+}
+MODULE(sched_migrate_task);
+
+static void sched_stat_runtime_process(const char *modname, int pass,
+				       double clock, int cpu, void *args)
+{
+	const char *comm;
+	int tid;
+
+	if (pass == 1) {
+		comm = get_arg_str(args, "comm");
+		tid = (int)get_arg_u64(args, "tid");
+		(void)find_or_add_task(comm, tid);
+	}
+}
+MODULE(sched_stat_runtime);
