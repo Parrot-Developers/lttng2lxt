@@ -1,0 +1,92 @@
+@200
+-Interrupts
+@20
+twd (29)/1
+@20
+twd (29)/0
+@20
+cast-nand_0 (35)/0
+@20
+eth0 (47)/0
+@20
+avifb_lcd1 (75)/0
+@20
+px-uart (91)/0
+@20
+softirq/0
+@820
+softirq/0 (info)
+@20
+softirq/1
+@820
+softirq/1 (info)
+@200
+-Global Info
+@820
+fork/0
+@820
+fork/1
+@200
+-Processes
+@20
+cpu idle/0
+@20
+cpu idle/1
+@20
+proc.state.[0-0] idle/0 thread
+@20
+proc.state.[6-6] migration/0
+@20
+proc.state.[7-7] watchdog/0
+@20
+proc.state.[11-11] watchdog/1
+@20
+proc.state.[16-16] sync_supers
+@20
+proc.state.[27-27] kworker/0:1
+@20
+proc.state.[28-28] ubi_bgt0d
+@20
+proc.state.[30-30] kworker/1:1
+@20
+proc.state.[237-237] sh
+@20
+proc.state.[238-238] syslogd
+@20
+proc.state.[239-239] klogd
+@20
+proc.state.[241-241] ubifs_bgt0_0
+@20
+proc.state.[242-242] flush-ubifs_0_0
+@20
+proc.state.[244-341] lttng-sessiond
+@20
+proc.state.[349-351] lttng-consumerd
+@20
+proc.state.[349-352] lttng-consumerd
+@20
+proc.state.[349-353] lttng-consumerd
+@20
+proc.state.[354-354] lttng
+@20
+proc.state.[0-355] lttng-sessiond
+@20
+proc.state.[0-356] lttng-consumerd
+@20
+proc.state.[0-357] lttng-consumerd
+@20
+proc.state.[0-358] lttng-consumerd
+@20
+proc.state.[359-359] iperf
+@20
+proc.state.[0-360] iperf
+@20
+proc.state.[0-361] iperf
+@20
+proc.state.[362-362] iperf
+@20
+proc.state.[0-363] iperf
+@20
+proc.state.[0-364] iperf
+@20
+proc.state.[365-365] lttng

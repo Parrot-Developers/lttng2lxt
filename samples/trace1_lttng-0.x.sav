@@ -1,0 +1,218 @@
+@200
+-Interrupts
+@90024
+cpu load
+@22
+jiffies
+@820
+IRQ (pc)
+@20
+LCDC
+@20
+MOST
+@20
+mmc0
+@20
+UART0
+@20
+BA315 NAND controller
+@20
+TIMER3
+@20
+parrot5-i2cm
+@20
+USB0
+@20
+softirq
+@820
+softirq (info)
+@820
+softirq (info2)
+@20
+tasklet_low
+@820
+tasklet_low (info)
+@200
+-Memory Management
+@20
+fault
+@820
+fault (info)
+@20
+switch
+@200
+-Processes
+@20
+global idle
+@820
+printk (pc)
+@820
+MODE
+@820
+Sched event
+@820
+SYSCALL (pc)
+@22
+SYSCALL[0:15]
+@20
+proc.state.[0-0] idle thread
+@20
+proc.state.[0-1186] ????
+@20
+proc.state.[5-5] events/0
+@20
+proc.state.[519-519] servicemanager
+@20
+proc.state.[522-774] android:unnamed
+@20
+proc.state.[527-527] 3g_conmon_sh
+@20
+proc.state.[554-554] kmmcd
+@20
+proc.state.[794-794] logwrapper
+@20
+proc.state.[795-795] ck5050
+@20
+proc.state.[795-814] Juba monitor
+@20
+proc.state.[795-828] ParrotAL_TIMER_
+@20
+proc.state.[795-829] CTargetInterfac
+@20
+proc.state.[795-830] CConnectInterfa
+@20
+proc.state.[795-831] CConnectInterfa
+@20
+proc.state.[795-832] CConnectInterfa
+@20
+proc.state.[795-890] TAMTAM main thr
+@20
+proc.state.[795-899] modem manager e
+@20
+proc.state.[795-904] Tuner_Notificat
+@20
+proc.state.[795-913] Concertos_File
+@20
+proc.state.[795-914] PlayFD
+@20
+proc.state.[795-919] Decoder
+@20
+proc.state.[795-921] MMP_Resampling_
+@20
+proc.state.[795-923] MMP_Sad_Filter
+@20
+proc.state.[795-925] MMP_Equalizer_F
+@20
+proc.state.[795-928] MMP_VB2_Filter
+@20
+proc.state.[795-929] MMP_Limiter_Fil
+@20
+proc.state.[795-930] Playback  front
+@20
+proc.state.[795-931] Playback backen
+@20
+proc.state.[795-1044] CTransportInter
+@20
+proc.state.[795-1045] CTransportInter
+@20
+proc.state.[795-1166] PlaybackTalaCha
+@20
+proc.state.[795-1167] PAudio
+@20
+proc.state.[958-958] app_process
+@20
+proc.state.[958-962] Binder Thread #
+@20
+proc.state.[958-963] Binder Thread #
+@20
+proc.state.[958-964] SurfaceFlinger
+@20
+proc.state.[958-973] er_ServerThread
+@20
+proc.state.[958-975] ActivityManager
+@20
+proc.state.[958-995] er$SensorThread
+@20
+proc.state.[958-1143] Binder Thread #
+@20
+proc.state.[1003-1003] app_process
+@20
+proc.state.[1003-1007] Binder Thread #
+@20
+proc.state.[1003-1008] Binder Thread #
+@20
+proc.state.[1003-1017] Thread-9
+@20
+proc.state.[1003-1019] java.util_Timer
+@20
+proc.state.[1003-1177] Binder Thread #
+@20
+proc.state.[1003-1178] Binder Thread #
+@20
+proc.state.[1020-1030] Binder Thread #
+@20
+proc.state.[1020-1033] Binder Thread #
+@20
+proc.state.[1020-1035] Binder Thread #
+@20
+proc.state.[1020-1041] CHostInterface:
+@20
+proc.state.[1020-1042] CHostInterface:
+@20
+proc.state.[1020-1043] CConnectInterfa
+@20
+proc.state.[1020-1046] CTransportInter
+@20
+proc.state.[1020-1047] CTransportInter
+@20
+proc.state.[1022-1031] Binder Thread #
+@20
+proc.state.[1022-1034] Binder Thread #
+@20
+proc.state.[1022-1036] Binder Thread #
+@20
+proc.state.[1022-1037] Thread-9
+@20
+proc.state.[1104-1104] app_process
+@20
+proc.state.[1104-1105] HeapWorker
+@20
+proc.state.[1104-1157] Binder Thread #
+@20
+proc.state.[1110-1114] Binder Thread #
+@20
+proc.state.[1110-1115] Binder Thread #
+@20
+proc.state.[1110-1116] Binder Thread #
+@20
+proc.state.[1110-1122] Thread-9
+@20
+proc.state.[1133-1133] app_process
+@20
+proc.state.[1133-1137] Binder Thread #
+@20
+proc.state.[1133-1138] Binder Thread #
+@20
+proc.state.[1133-1139] Binder Thread #
+@20
+proc.state.[1144-1148] Binder Thread #
+@20
+proc.state.[1169-1169] app_process
+@20
+proc.state.[1169-1174] Binder Thread #
+@20
+proc.state.[1169-1175] Binder Thread #
+@20
+proc.state.[1169-1176] Binder Thread #
+@20
+proc.state.[1181-1181] trace
+@20
+proc.state.[1185-1185] lttctl
+@20
+proc.state.[1187-1187] lttd
+@20
+proc.state.[1187-1188] lttd
+@20
+proc.state.[1189-1189] /system/bin/sleep
+@20
+proc.state.[1190-1190] /system/xbin/lttctl

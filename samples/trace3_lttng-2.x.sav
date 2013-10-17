@@ -1,0 +1,1552 @@
+@200
+-Interrupts
+@20
+twd (29)/1
+@20
+twd (29)/0
+@20
+mali_pp_irq_handlers (32)/0
+@20
+mali_gp_irq_handlers (33)/0
+@20
+cast-nand_0 (35)/0
+@20
+ehci_hcd:usb1 (41)/0
+@20
+avifb_lcd0 (74)/0
+@20
+px-uart (91)/0
+@20
+px-uart (92)/0
+@20
+softirq/0
+@820
+softirq/0 (info)
+@20
+softirq/1
+@820
+softirq/1 (info)
+@20
+p7-i2cm (100)/0
+@200
+-Processes
+@20
+cpu idle/0
+@20
+cpu idle/1
+@20
+proc.state.[0-0] idle/1 thread
+@20
+proc.state.[3-3] ksoftirqd/0
+@20
+proc.state.[256-280] CKCM SERVER
+@20
+proc.state.[256-379] PlayFD
+@20
+proc.state.[1827-1903] lttng-sessiond
+@20
+proc.state.[1912-1914] lttng-consumerd
+@20
+proc.state.[1912-1915] lttng-consumerd
+@20
+proc.state.[1912-1916] lttng-consumerd
+@20
+proc.state.[0-1927] lttng-sessiond
+@20
+proc.state.[0-1928] lttng-consumerd
+@20
+proc.state.[0-1929] lttng-consumerd
+@20
+proc.state.[0-1930] lttng-consumerd
+@20
+proc.state.[0-1931] UPnP_AdvTP
+@20
+proc.state.[0-1932] UPnP_AdvTP
+@20
+proc.state.[0-1933] start
+@20
+proc.state.[0-1934] zygote
+@20
+proc.state.[0-1935] UPnP_AdvTP
+@20
+proc.state.[0-1936] UPnP_AdvTP
+@20
+proc.state.[0-1937] system_server
+@20
+proc.state.[0-1938] HeapWorker
+@20
+proc.state.[0-1939] GC
+@20
+proc.state.[0-1940] Signal Catcher
+@20
+proc.state.[0-1941] JDWP
+@20
+proc.state.[0-1942] Compiler
+@20
+proc.state.[0-1943] Binder Thread #
+@20
+proc.state.[0-1944] Binder Thread #
+@20
+proc.state.[0-1945] SurfaceFlinger
+@20
+proc.state.[0-1946] DisplayEventThr
+@20
+proc.state.[0-1947] DisplayEventThr
+@20
+proc.state.[0-1948] SurfaceFlinger
+@20
+proc.state.[0-1949] SurfaceFlinger
+@20
+proc.state.[0-1950] er_ServerThread
+@20
+proc.state.[0-1951] bootanimation
+@20
+proc.state.[0-1952] ActivityManager
+@20
+proc.state.[0-1953] BatteryStats-Wr
+@20
+proc.state.[0-1954] Binder Thread #
+@20
+proc.state.[0-1955] UPnP_AdvTP
+@20
+proc.state.[0-1956] BootAnimation
+@20
+proc.state.[0-1957] ProcessStats
+@20
+proc.state.[0-1958] PackageManager
+@20
+proc.state.[0-1959] BootAnimation
+@20
+proc.state.[0-1960] BootAnimation
+@20
+proc.state.[0-1961] FileObserver
+@20
+proc.state.[0-1962] AccountManagerS
+@20
+proc.state.[0-1963] er_ServerThread
+@20
+proc.state.[0-1964] SyncHandlerThre
+@20
+proc.state.[0-1965] populate-settin
+@20
+proc.state.[0-1966] ScreenOffThread
+@20
+proc.state.[0-1967] PowerManagerSer
+@20
+proc.state.[0-1968] AlarmManager
+@20
+proc.state.[0-1969] WindowManager
+@20
+proc.state.[0-1970] WindowManagerPo
+@20
+proc.state.[0-1971] InputDispatcher
+@20
+proc.state.[0-1972] InputReader
+@20
+proc.state.[0-1973] sup log
+@20
+proc.state.[0-1974] PAL_TIMER
+@20
+proc.state.[0-1975] GLUES_Notificat
+@20
+proc.state.[0-1976] HSTI_WaitEvt
+@20
+proc.state.[0-1977] HGI_Notificatio
+@20
+proc.state.[0-1978] AIO_Monitor
+@20
+proc.state.[0-1979] HSTI_Write
+@20
+proc.state.[0-1980] BluetoothProfil
+@20
+proc.state.[0-1981] BluetoothProfil
+@20
+proc.state.[0-1982] sup log
+@20
+proc.state.[0-1983] PAL_TIMER
+@20
+proc.state.[0-1984] HSTI_WaitEvt
+@20
+proc.state.[0-1985] AIO_Monitor
+@20
+proc.state.[0-1986] HSTI_Write
+@20
+proc.state.[0-1987] sup log
+@20
+proc.state.[0-1988] PAL_TIMER
+@20
+proc.state.[0-1989] Thread-31
+@20
+proc.state.[0-1990] Thread-32
+@20
+proc.state.[0-1991] HSTI_ProcessEvt
+@20
+proc.state.[0-1992] HSTI_WaitEvt
+@20
+proc.state.[0-1993] HSTI_Connect
+@20
+proc.state.[0-1994] HSTI_Write
+@20
+proc.state.[0-1995] HSTI_Write
+@20
+proc.state.[0-1996] HSTI_Read
+@20
+proc.state.[0-1997] NetdConnector
+@20
+proc.state.[0-1998] Thread-39
+@20
+proc.state.[0-1999] ConnectivityThr
+@20
+proc.state.[0-2000] WifiService
+@20
+proc.state.[0-2001] sup log
+@20
+proc.state.[0-2002] PAL_TIMER
+@20
+proc.state.[0-2003] HSTI_WaitEvt
+@20
+proc.state.[0-2004] AIO_Monitor
+@20
+proc.state.[0-2005] HSTI_Write
+@20
+proc.state.[0-2006] Thread-42
+@20
+proc.state.[0-2007] UPnP_AdvTP
+@20
+proc.state.[0-2008] dhcpcd-run-hook
+@20
+proc.state.[0-2009] ls
+@20
+proc.state.[0-2010] ls
+@20
+proc.state.[0-2011] setprop
+@20
+proc.state.[0-2012] setprop
+@20
+proc.state.[0-2013] setprop
+@20
+proc.state.[0-2014] setprop
+@20
+proc.state.[0-2015] ls
+@20
+proc.state.[0-2016] setprop
+@20
+proc.state.[0-2017] setprop
+@20
+proc.state.[0-2018] ls
+@20
+proc.state.[0-2019] Thread-43
+@20
+proc.state.[0-2020] Tethering
+@20
+proc.state.[0-2021] logwrapper
+@20
+proc.state.[0-2022] dhcpcd
+@20
+proc.state.[0-2023] MountService
+@20
+proc.state.[0-2024] VoldConnector
+@20
+proc.state.[0-2025] Thread-47
+@20
+proc.state.[0-2026] AudioService
+@20
+proc.state.[0-2027] dhcpcd-run-hook
+@20
+proc.state.[0-2028] ls
+@20
+proc.state.[0-2029] ls
+@20
+proc.state.[0-2030] ls
+@20
+proc.state.[0-2031] setprop
+@20
+proc.state.[0-2032] ls
+@20
+proc.state.[0-2033] SoundPool
+@20
+proc.state.[0-2034] SoundPoolThread
+@20
+proc.state.[0-2035] UEventObserver
+@20
+proc.state.[0-2036] TimedEventQueue
+@20
+proc.state.[0-2037] AudioCache call
+@20
+proc.state.[0-2038] backup
+@20
+proc.state.[0-2039] TimedEventQueue
+@20
+proc.state.[0-2040] AudioCache call
+@20
+proc.state.[0-2041] Thread-54
+@20
+proc.state.[0-2042] Thread-55
+@20
+proc.state.[0-2043] ndroid_systemui
+@20
+proc.state.[0-2044] HeapWorker
+@20
+proc.state.[0-2045] GC
+@20
+proc.state.[0-2046] Signal Catcher
+@20
+proc.state.[0-2047] JDWP
+@20
+proc.state.[0-2048] Compiler
+@20
+proc.state.[0-2049] Binder Thread #
+@20
+proc.state.[0-2050] watchdog
+@20
+proc.state.[0-2051] Binder Thread #
+@20
+proc.state.[0-2052] putmethod_latin
+@20
+proc.state.[0-2053] LocationManager
+@20
+proc.state.[0-2054] HeapWorker
+@20
+proc.state.[0-2055] GC
+@20
+proc.state.[0-2056] Signal Catcher
+@20
+proc.state.[0-2057] JDWP
+@20
+proc.state.[0-2058] Compiler
+@20
+proc.state.[0-2059] Binder Thread #
+@20
+proc.state.[0-2060] Binder Thread #
+@20
+proc.state.[0-2061] ThrottleService
+@20
+proc.state.[0-2062] NetworkTimeUpda
+@20
+proc.state.[0-2063] Binder Thread #
+@20
+proc.state.[0-2064] kworker/u:0
+@20
+proc.state.[0-2065] tc
+@20
+proc.state.[0-2066] modprobe
+@20
+proc.state.[0-2067] t_activesources
+@20
+proc.state.[0-2068] kworker/u:0
+@20
+proc.state.[0-2069] HeapWorker
+@20
+proc.state.[0-2070] modprobe
+@20
+proc.state.[0-2071] GC
+@20
+proc.state.[0-2072] Signal Catcher
+@20
+proc.state.[0-2073] om_parrot_phone
+@20
+proc.state.[0-2074] JDWP
+@20
+proc.state.[0-2075] Compiler
+@20
+proc.state.[0-2076] HeapWorker
+@20
+proc.state.[0-2077] kworker/u:0
+@20
+proc.state.[0-2078] modprobe
+@20
+proc.state.[0-2079] Binder Thread #
+@20
+proc.state.[0-2080] GC
+@20
+proc.state.[0-2081] veleventservice
+@20
+proc.state.[0-2082] tc
+@20
+proc.state.[0-2083] Signal Catcher
+@20
+proc.state.[0-2084] Binder Thread #
+@20
+proc.state.[0-2085] HeapWorker
+@20
+proc.state.[0-2086] JDWP
+@20
+proc.state.[0-2087] Compiler
+@20
+proc.state.[0-2088] Binder Thread #
+@20
+proc.state.[0-2089] ot_audioservice
+@20
+proc.state.[0-2090] HeapWorker
+@20
+proc.state.[0-2091] Binder Thread #
+@20
+proc.state.[0-2092] GC
+@20
+proc.state.[0-2093] kworker/u:0
+@20
+proc.state.[0-2094] Signal Catcher
+@20
+proc.state.[0-2095] modprobe
+@20
+proc.state.[0-2096] GC
+@20
+proc.state.[0-2097] JDWP
+@20
+proc.state.[0-2098] Compiler
+@20
+proc.state.[0-2099] parrot_asteroid
+@20
+proc.state.[0-2100] Signal Catcher
+@20
+proc.state.[0-2101] Binder Thread #
+@20
+proc.state.[0-2102] tc
+@20
+proc.state.[0-2103] kworker/u:0
+@20
+proc.state.[0-2104] modprobe
+@20
+proc.state.[0-2105] HeapWorker
+@20
+proc.state.[0-2106] JDWP
+@20
+proc.state.[0-2107] rot_pim_service
+@20
+proc.state.[0-2108] HeapWorker
+@20
+proc.state.[0-2109] Compiler
+@20
+proc.state.[0-2110] GC
+@20
+proc.state.[0-2111] Signal Catcher
+@20
+proc.state.[0-2112] JDWP
+@20
+proc.state.[0-2113] Compiler
+@20
+proc.state.[0-2114] GC
+@20
+proc.state.[0-2115] Binder Thread #
+@20
+proc.state.[0-2116] Binder Thread #
+@20
+proc.state.[0-2117] Signal Catcher
+@20
+proc.state.[0-2118] om_parrot_home2
+@20
+proc.state.[0-2119] HeapWorker
+@20
+proc.state.[0-2120] GC
+@20
+proc.state.[0-2121] Signal Catcher
+@20
+proc.state.[0-2122] JDWP
+@20
+proc.state.[0-2123] Compiler
+@20
+proc.state.[0-2124] JDWP
+@20
+proc.state.[0-2125] Binder Thread #
+@20
+proc.state.[0-2126] Binder Thread #
+@20
+proc.state.[0-2127] Binder Thread #
+@20
+proc.state.[0-2128] Binder Thread #
+@20
+proc.state.[0-2129] Compiler
+@20
+proc.state.[0-2130] Binder Thread #
+@20
+proc.state.[0-2131] Binder Thread #
+@20
+proc.state.[0-2132] GpsLocationProv
+@20
+proc.state.[0-2133] Binder Thread #
+@20
+proc.state.[0-2134] Error dump: sys
+@20
+proc.state.[0-2135] AsyncTask #1
+@20
+proc.state.[0-2136] AsyncTask #2
+@20
+proc.state.[0-2137] AsyncTask #3
+@20
+proc.state.[0-2138] AsyncTask #4
+@20
+proc.state.[0-2139] libgps_thread
+@20
+proc.state.[0-2140] d_process_acore
+@20
+proc.state.[0-2141] HeapWorker
+@20
+proc.state.[0-2142] GC
+@20
+proc.state.[0-2143] Signal Catcher
+@20
+proc.state.[0-2144] JDWP
+@20
+proc.state.[0-2145] ndroid_settings
+@20
+proc.state.[0-2146] Compiler
+@20
+proc.state.[0-2147] HeapWorker
+@20
+proc.state.[0-2148] Binder Thread #
+@20
+proc.state.[0-2149] GC
+@20
+proc.state.[0-2150] AsyncTask #4
+@20
+proc.state.[0-2151] Signal Catcher
+@20
+proc.state.[0-2152] Binder Thread #
+@20
+proc.state.[0-2153] JDWP
+@20
+proc.state.[0-2154] RILSender
+@20
+proc.state.[0-2155] Compiler
+@20
+proc.state.[0-2156] RILReceiver
+@20
+proc.state.[0-2157] Binder Thread #
+@20
+proc.state.[0-2158] Binder Thread #
+@20
+proc.state.[0-2159] Binder Thread #
+@20
+proc.state.[0-2160] Binder Thread #
+@20
+proc.state.[0-2161] GsmDataConnecti
+@20
+proc.state.[0-2162] SystemUI Storag
+@20
+proc.state.[0-2163] Stk Telephony s
+@20
+proc.state.[0-2164] RilMessageDecod
+@20
+proc.state.[0-2165] Stk Icon Loader
+@20
+proc.state.[0-2166] ApplicationsPro
+@20
+proc.state.[0-2167] eroid_voicereco
+@20
+proc.state.[0-2168] d_process_acore
+@20
+proc.state.[0-2169] HeapWorker
+@20
+proc.state.[0-2170] GC
+@20
+proc.state.[0-2171] Signal Catcher
+@20
+proc.state.[0-2172] JDWP
+@20
+proc.state.[0-2173] Compiler
+@20
+proc.state.[0-2174] Binder Thread #
+@20
+proc.state.[0-2175] Binder Thread #
+@20
+proc.state.[0-2176] Binder Thread #
+@20
+proc.state.[0-2177] Binder Thread #
+@20
+proc.state.[0-2178] Desktop Items L
+@20
+proc.state.[0-2179] Thread-11
+@20
+proc.state.[0-2180] Desktop Items L
+@20
+proc.state.[0-2181] Binder Thread #
+@20
+proc.state.[0-2182] Desktop Items L
+@20
+proc.state.[0-2183] Thread-13
+@20
+proc.state.[0-2184] _provider_media
+@20
+proc.state.[0-2185] HeapWorker
+@20
+proc.state.[0-2186] Binder Thread #
+@20
+proc.state.[0-2187] GC
+@20
+proc.state.[0-2188] Signal Catcher
+@20
+proc.state.[0-2189] JDWP
+@20
+proc.state.[0-2190] Applications Lo
+@20
+proc.state.[0-2191] Compiler
+@20
+proc.state.[0-2192] Binder Thread #
+@20
+proc.state.[0-2193] Binder Thread #
+@20
+proc.state.[0-2194] AsyncTask #1
+@20
+proc.state.[0-2195] sup log
+@20
+proc.state.[0-2196] PAL_TIMER
+@20
+proc.state.[0-2197] HSTI_WaitEvt
+@20
+proc.state.[0-2198] HORN_MediaBrows
+@20
+proc.state.[0-2199] HORN_MediaManag
+@20
+proc.state.[0-2200] AIO_Monitor
+@20
+proc.state.[0-2201] HSTI_Write
+@20
+proc.state.[0-2202] Thread-65
+@20
+proc.state.[0-2203] sup log
+@20
+proc.state.[0-2204] PAL_TIMER
+@20
+proc.state.[0-2205] AsyncTask #1
+@20
+proc.state.[0-2206] Thread-66
+@20
+proc.state.[0-2207] Binder Thread #
+@20
+proc.state.[0-2208] id_connectivity
+@20
+proc.state.[0-2209] Thread-67
+@20
+proc.state.[0-2210] HeapWorker
+@20
+proc.state.[0-2211] GC
+@20
+proc.state.[0-2212] Signal Catcher
+@20
+proc.state.[0-2213] droid_deskclock
+@20
+proc.state.[0-2214] pool-1-thread-1
+@20
+proc.state.[0-2215] JDWP
+@20
+proc.state.[0-2216] HeapWorker
+@20
+proc.state.[0-2217] Compiler
+@20
+proc.state.[0-2218] teroid_provider
+@20
+proc.state.[0-2219] d_process_media
+@20
+proc.state.[0-2220] HeapWorker
+@20
+proc.state.[0-2221] GC
+@20
+proc.state.[0-2222] Signal Catcher
+@20
+proc.state.[0-2223] GC
+@20
+proc.state.[0-2224] JDWP
+@20
+proc.state.[0-2225] HeapWorker
+@20
+proc.state.[0-2226] Binder Thread #
+@20
+proc.state.[0-2227] Signal Catcher
+@20
+proc.state.[0-2228] Compiler
+@20
+proc.state.[0-2229] GC
+@20
+proc.state.[0-2230] JDWP
+@20
+proc.state.[0-2231] Binder Thread #
+@20
+proc.state.[0-2232] Binder Thread #
+@20
+proc.state.[0-2233] Signal Catcher
+@20
+proc.state.[0-2234] Binder Thread #
+@20
+proc.state.[0-2235] Compiler
+@20
+proc.state.[0-2236] JDWP
+@20
+proc.state.[0-2237] Compiler
+@20
+proc.state.[0-2238] Binder Thread #
+@20
+proc.state.[0-2239] Binder Thread #
+@20
+proc.state.[0-2240] Binder Thread #
+@20
+proc.state.[0-2241] Binder Thread #
+@20
+proc.state.[0-2242] populate-settin
+@20
+proc.state.[0-2243] pool-1-thread-1
+@20
+proc.state.[0-2244] droid_deskclock
+@20
+proc.state.[0-2245] populate-settin
+@20
+proc.state.[0-2246] d_process_media
+@20
+proc.state.[0-2247] rot_mediaplayer
+@20
+proc.state.[0-2248] HeapWorker
+@20
+proc.state.[0-2249] GC
+@20
+proc.state.[0-2250] Signal Catcher
+@20
+proc.state.[0-2251] JDWP
+@20
+proc.state.[0-2252] Compiler
+@20
+proc.state.[0-2253] Binder Thread #
+@20
+proc.state.[0-2254] Binder Thread #
+@20
+proc.state.[0-2255] thumbs thread
+@20
+proc.state.[0-2256] populate-settin
+@20
+proc.state.[0-2257] dhcpcd-run-hook
+@20
+proc.state.[0-2258] rot_mediaplayer
+@20
+proc.state.[0-2259] ls
+@20
+proc.state.[0-2260] ls
+@20
+proc.state.[0-2261] setprop
+@20
+proc.state.[0-2262] setprop
+@20
+proc.state.[0-2263] setprop
+@20
+proc.state.[0-2264] setprop
+@20
+proc.state.[0-2265] setprop
+@20
+proc.state.[0-2266] setprop
+@20
+proc.state.[0-2267] ls
+@20
+proc.state.[0-2268] setprop
+@20
+proc.state.[0-2269] setprop
+@20
+proc.state.[0-2270] setprop
+@20
+proc.state.[0-2271] t_audiosettings
+@20
+proc.state.[0-2272] HSTI_WaitEvt
+@20
+proc.state.[0-2273] HGI_Notificatio
+@20
+proc.state.[0-2274] HeapWorker
+@20
+proc.state.[0-2275] GC
+@20
+proc.state.[0-2276] setprop
+@20
+proc.state.[0-2277] Signal Catcher
+@20
+proc.state.[0-2278] JDWP
+@20
+proc.state.[0-2279] GluePim-Executo
+@20
+proc.state.[0-2280] AIO_Monitor
+@20
+proc.state.[0-2281] HSTI_Write
+@20
+proc.state.[0-2282] Compiler
+@20
+proc.state.[0-2283] setprop
+@20
+proc.state.[0-2284] setprop
+@20
+proc.state.[0-2285] setprop
+@20
+proc.state.[0-2286] ls
+@20
+proc.state.[0-2287] Binder Thread #
+@20
+proc.state.[0-2288] Binder Thread #
+@20
+proc.state.[0-2289] populate-settin
+@20
+proc.state.[0-2290] populate-settin
+@20
+proc.state.[0-2291] m_android_email
+@20
+proc.state.[0-2292] HeapWorker
+@20
+proc.state.[0-2293] GC
+@20
+proc.state.[0-2294] Signal Catcher
+@20
+proc.state.[0-2295] JDWP
+@20
+proc.state.[0-2296] Compiler
+@20
+proc.state.[0-2297] Binder Thread #
+@20
+proc.state.[0-2298] Binder Thread #
+@20
+proc.state.[0-2299] Thread-10
+@20
+proc.state.[0-2300] Thread-11
+@20
+proc.state.[0-2301] Thread-11
+@20
+proc.state.[0-2302] Thread-12
+@20
+proc.state.[0-2303] ot_connectivity
+@20
+proc.state.[0-2304] HeapWorker
+@20
+proc.state.[0-2305] ocessorService]
+@20
+proc.state.[0-2306] GC
+@20
+proc.state.[0-2307] Signal Catcher
+@20
+proc.state.[0-2308] JDWP
+@20
+proc.state.[0-2309] Compiler
+@20
+proc.state.[0-2310] Binder Thread #
+@20
+proc.state.[0-2311] Binder Thread #
+@20
+proc.state.[0-2312] Thread-14
+@20
+proc.state.[0-2313] Thread-15
+@20
+proc.state.[0-2314] WhiteListDownlo
+@20
+proc.state.[0-2315] MediaScannerSer
+@20
+proc.state.[0-2316] FileObserver
+@20
+proc.state.[0-2317] Thread-69
+@20
+proc.state.[0-2318] BT PIM I0
+@20
+proc.state.[0-2319] BT PIM I1
+@20
+proc.state.[0-2320] BT PIM I2
+@20
+proc.state.[0-2321] Thread-12
+@20
+proc.state.[0-2322] Binder Thread #
+@20
+proc.state.[0-2323] Binder Thread #
+@20
+proc.state.[0-2324] Thread-16
+@20
+proc.state.[0-2325] Download Servic
+@20
+proc.state.[0-2326] t_crashreporter
+@20
+proc.state.[0-2327] HeapWorker
+@20
+proc.state.[0-2328] GC
+@20
+proc.state.[0-2329] Error dump: sys
+@20
+proc.state.[0-2330] Signal Catcher
+@20
+proc.state.[0-2331] JDWP
+@20
+proc.state.[0-2332] Compiler
+@20
+proc.state.[0-2333] Binder Thread #
+@20
+proc.state.[0-2334] Binder Thread #
+@20
+proc.state.[0-2335] IntentService[C
+@20
+proc.state.[0-2336] viders_calendar
+@20
+proc.state.[0-2337] HeapWorker
+@20
+proc.state.[0-2338] GC
+@20
+proc.state.[0-2339] Signal Catcher
+@20
+proc.state.[0-2340] JDWP
+@20
+proc.state.[0-2341] Compiler
+@20
+proc.state.[0-2342] Binder Thread #
+@20
+proc.state.[0-2343] Binder Thread #
+@20
+proc.state.[0-2344] viders_calendar
+@20
+proc.state.[0-2345] Thread-10
+@20
+proc.state.[0-2346] Thread-11
+@20
+proc.state.[0-2347] _cooliris_media
+@20
+proc.state.[0-2348] HeapWorker
+@20
+proc.state.[0-2349] GC
+@20
+proc.state.[0-2350] Signal Catcher
+@20
+proc.state.[0-2351] JDWP
+@20
+proc.state.[0-2352] Compiler
+@20
+proc.state.[0-2353] Binder Thread #
+@20
+proc.state.[0-2354] Binder Thread #
+@20
+proc.state.[0-2355] RefQueueWorker@
+@20
+proc.state.[0-2356] _cooliris_media
+@20
+proc.state.[0-2357] Error dump: sys
+@20
+proc.state.[0-2358] debuggerd
+@20
+proc.state.[0-2359] flush-179:0
+@20
+proc.state.[0-2360] flush-ubifs_0_0
+@20
+proc.state.[0-2361] ck5050
+@20
+proc.state.[0-2362] sup log
+@20
+proc.state.[0-2363] Init
+@20
+proc.state.[0-2364] ParrotAL_UART-0
+@20
+proc.state.[0-2365] CKCM SERVER
+@20
+proc.state.[0-2366] ParrotAL_TIMER
+@20
+proc.state.[0-2367] ParrotAL_TIMER_
+@20
+proc.state.[0-2368] RemoteUI
+@20
+proc.state.[0-2369] UniRecorder
+@20
+proc.state.[0-2370] Blues_Task
+@20
+proc.state.[0-2371] ParrotAL_UART-1
+@20
+proc.state.[0-2372] SOUL Task
+@20
+proc.state.[0-2373] PAudio
+@20
+proc.state.[0-2374] TAMTAM main thr
+@20
+proc.state.[0-2375] DiscoiPodSEND_t
+@20
+proc.state.[0-2376] DiscoiPodINTERP
+@20
+proc.state.[0-2377] DiscoiPodAUTHEN
+@20
+proc.state.[0-2378] Disco_DCODB_Get
+@20
+proc.state.[0-2379] Disco_DCODB_Set
+@20
+proc.state.[0-2380] Juba monitor
+@20
+proc.state.[0-2381] Settings
+@20
+proc.state.[0-2382] Concertos_Notif
+@20
+proc.state.[0-2383] Concertos_Contr
+@20
+proc.state.[0-2384] pal_ppp_notify
+@20
+proc.state.[0-2385] modman_engine
+@20
+proc.state.[0-2386] modman_device
+@20
+proc.state.[0-2387] Juba monitor
+@20
+proc.state.[0-2388] EXTI task
+@20
+proc.state.[0-2389] BLI task
+@20
+proc.state.[0-2390] Phonebook
+@20
+proc.state.[0-2391] Audio
+@20
+proc.state.[0-2392] Concertos_Andro
+@20
+proc.state.[0-2393] Concertos_Binde
+@20
+proc.state.[0-2394] Concertos_Andro
+@20
+proc.state.[0-2395] Binder Thread #
+@20
+proc.state.[0-2396] Concertos_Andro
+@20
+proc.state.[0-2397] Concertos_Andro
+@20
+proc.state.[0-2398] Concertos_Andro
+@20
+proc.state.[0-2399] Concertos_Andro
+@20
+proc.state.[0-2400] Concertos_Andro
+@20
+proc.state.[0-2401] Concertos_Andro
+@20
+proc.state.[0-2402] Concertos_Andro
+@20
+proc.state.[0-2403] Concertos_Andro
+@20
+proc.state.[0-2404] Concertos_Exti
+@20
+proc.state.[0-2405] Juba monitor
+@20
+proc.state.[0-2406] Concertos_iPodN
+@20
+proc.state.[0-2407] Concertos_File
+@20
+proc.state.[0-2408] PlayFD
+@20
+proc.state.[0-2409] Concertos_FileM
+@20
+proc.state.[0-2410] Concertos_File
+@20
+proc.state.[0-2411] Concertos_Upnp_
+@20
+proc.state.[0-2412] REQ_BROWSING
+@20
+proc.state.[0-2413] MAPI
+@20
+proc.state.[0-2414] MAPIList
+@20
+proc.state.[0-2415] RapContext
+@20
+proc.state.[0-2416] RapEvent
+@20
+proc.state.[0-2417] RapProcedure
+@20
+proc.state.[0-2418] Juba monitor
+@20
+proc.state.[0-2419] AudioBinder_MED
+@20
+proc.state.[0-2420] AudioBinder_PHO
+@20
+proc.state.[0-2421] AudioBinder_SON
+@20
+proc.state.[0-2422] AudioBinder_TTS
+@20
+proc.state.[0-2423] AudioBinder__In
+@20
+proc.state.[0-2424] HSTI_WaitCmd
+@20
+proc.state.[0-2425] AT0_Connect
+@20
+proc.state.[0-2426] AT1_Connect
+@20
+proc.state.[0-2427] DUN_Connect
+@20
+proc.state.[0-2428] UPNP0_Connect
+@20
+proc.state.[0-2429] UPNP0_0_Connect
+@20
+proc.state.[0-2430] AIO_Monitor
+@20
+proc.state.[0-2431] UPNP_BROWSING
+@20
+proc.state.[0-2432] UPNP_DOWNLOAD
+@20
+proc.state.[0-2433] UPNP_CONTROLLER
+@20
+proc.state.[0-2434] UPnP_Initialise
+@20
+proc.state.[0-2435] UPnP_TxTP
+@20
+proc.state.[0-2436] UPnP_TxTP
+@20
+proc.state.[0-2437] UPnP_TxTP
+@20
+proc.state.[0-2438] UPnP_TxTP
+@20
+proc.state.[0-2439] UPnP_TxTP
+@20
+proc.state.[0-2440] UPnP_RxTP
+@20
+proc.state.[0-2441] UPnP_RxTP
+@20
+proc.state.[0-2442] UPnP_RxTP
+@20
+proc.state.[0-2443] UPnP_RxTP
+@20
+proc.state.[0-2444] UPnP_RxTP
+@20
+proc.state.[0-2445] UPnP_AdvTP
+@20
+proc.state.[0-2446] UPnP_AdvTP
+@20
+proc.state.[0-2447] UPnP_AdvTP
+@20
+proc.state.[0-2448] UPnP_AdvTP
+@20
+proc.state.[0-2449] UPnP_AdvTP
+@20
+proc.state.[0-2450] UPnP_ProfileTP
+@20
+proc.state.[0-2451] UPnP_ProfileTP
+@20
+proc.state.[0-2452] UPnP_ProfileTP
+@20
+proc.state.[0-2453] UPnP_ProfileTP
+@20
+proc.state.[0-2454] UPnP_ProfileTP
+@20
+proc.state.[0-2455] UPnP_TxTP
+@20
+proc.state.[0-2456] UPnP_AdvTP
+@20
+proc.state.[0-2457] Decoder
+@20
+proc.state.[0-2458] MMP_Resampling_
+@20
+proc.state.[0-2459] MMP_Sad_Filter
+@20
+proc.state.[0-2460] VB2 update thre
+@20
+proc.state.[0-2461] MMP_VB2_Filter
+@20
+proc.state.[0-2462] MMP_Update_EQ_c
+@20
+proc.state.[0-2463] Equalizer
+@20
+proc.state.[0-2464] MMP_CSV2_Filter
+@20
+proc.state.[0-2465] Playback  front
+@20
+proc.state.[0-2466] Playback backen
+@20
+proc.state.[0-2467] Concertos_LineI
+@20
+proc.state.[0-2468] MMP AudioInput 
+@20
+proc.state.[0-2469] MMP AudioInput 
+@20
+proc.state.[0-2470] TTS Manager thr
+@20
+proc.state.[0-2471] SoprAsrFrontEnd
+@20
+proc.state.[0-2472] SoprAsrBackEnd
+@20
+proc.state.[0-2473] Memo Recording
+@20
+proc.state.[0-2474] RapChangeLangua
+@20
+proc.state.[0-2475] L2CAP_Sender-0
+@20
+proc.state.[0-2476] Blues_Obex_Work
+@20
+proc.state.[0-2477] Blues_Obex_Work
+@20
+proc.state.[0-2478] Blues_Obex_Work
+@20
+proc.state.[0-2479] Blues_Job_Worke
+@20
+proc.state.[0-2480] BT PIM I0
+@20
+proc.state.[0-2481] BT PIM I1
+@20
+proc.state.[0-2482] BT PIM I2
+@20
+proc.state.[0-2483] HSTI_Write
+@20
+proc.state.[0-2484] HSTI_Write
+@20
+proc.state.[0-2485] HSTI_Read
+@20
+proc.state.[0-2486] UPnP_RxTP
+@20
+proc.state.[0-2487] SvoxLoadTemp
+@20
+proc.state.[0-2488] UPnP_ProfileTP
+@20
+proc.state.[0-2489] UPnP_AdvTP
+@20
+proc.state.[0-2490] UPnP_AdvTP
+@20
+proc.state.[0-2491] HSTI_Write
+@20
+proc.state.[0-2492] HSTI_Write
+@20
+proc.state.[0-2493] HSTI_Write
+@20
+proc.state.[0-2494] HSTI_Write
+@20
+proc.state.[0-2495] HSTI_Write
+@20
+proc.state.[0-2496] HSTI_Write
+@20
+proc.state.[0-2497] HSTI_Write
+@20
+proc.state.[0-2498] HornVol_Startup
+@20
+proc.state.[0-2499] galileo
+@20
+proc.state.[0-2500] lttng
+@20
+proc.state.[1-1] init
+@20
+proc.state.[2-2] kthreadd
+@20
+proc.state.[4-4] kworker/0:0
+@20
+proc.state.[5-5] kworker/u:0
+@20
+proc.state.[6-6] migration/0
+@20
+proc.state.[7-7] watchdog/0
+@20
+proc.state.[8-8] migration/1
+@20
+proc.state.[10-10] ksoftirqd/1
+@20
+proc.state.[11-11] watchdog/1
+@20
+proc.state.[16-16] sync_supers
+@20
+proc.state.[17-17] bdi-default
+@20
+proc.state.[30-30] kworker/1:1
+@20
+proc.state.[31-31] ubi_bgt0d
+@20
+proc.state.[36-36] kworker/u:1
+@20
+proc.state.[45-45] ueventd
+@20
+proc.state.[47-47] ubifs_bgt0_1
+@20
+proc.state.[65-65] servicemanager
+@20
+proc.state.[66-95] vold
+@20
+proc.state.[66-97] vold
+@20
+proc.state.[67-98] netd
+@20
+proc.state.[67-99] netd
+@20
+proc.state.[69-108] rild
+@20
+proc.state.[69-109] sup log
+@20
+proc.state.[69-111] HSTI_WaitEvt
+@20
+proc.state.[69-112] HGI_Notificatio
+@20
+proc.state.[69-113] AIO_Monitor
+@20
+proc.state.[72-72] installd
+@20
+proc.state.[85-85] macgyverd
+@20
+proc.state.[107-107] udevd
+@20
+proc.state.[134-134] udevd
+@20
+proc.state.[152-152] ujuba_mmcblk0
+@20
+proc.state.[171-171] ujuba_mmcblk0p1
+@20
+proc.state.[200-202] sup log
+@20
+proc.state.[200-204] server_thread_s
+@20
+proc.state.[256-256] ck5050
+@20
+proc.state.[256-267] sup log
+@20
+proc.state.[256-270] ParrotAL_UART-0
+@20
+proc.state.[256-281] ParrotAL_TIMER
+@20
+proc.state.[256-282] ParrotAL_TIMER_
+@20
+proc.state.[256-283] RemoteUI
+@20
+proc.state.[256-284] UniRecorder
+@20
+proc.state.[256-287] Blues_Task
+@20
+proc.state.[256-288] ParrotAL_UART-1
+@20
+proc.state.[256-289] SOUL Task
+@20
+proc.state.[256-291] PAudio
+@20
+proc.state.[256-323] TAMTAM main thr
+@20
+proc.state.[256-324] DiscoiPodSEND_t
+@20
+proc.state.[256-325] DiscoiPodINTERP
+@20
+proc.state.[256-326] DiscoiPodAUTHEN
+@20
+proc.state.[256-328] Disco_DCODB_Get
+@20
+proc.state.[256-329] Disco_DCODB_Set
+@20
+proc.state.[256-331] Juba monitor
+@20
+proc.state.[256-333] Settings
+@20
+proc.state.[256-334] Concertos_Notif
+@20
+proc.state.[256-335] Concertos_Contr
+@20
+proc.state.[256-350] pal_ppp_notify
+@20
+proc.state.[256-351] modman_engine
+@20
+proc.state.[256-352] modman_device
+@20
+proc.state.[256-354] Juba monitor
+@20
+proc.state.[256-355] EXTI task
+@20
+proc.state.[256-356] BLI task
+@20
+proc.state.[256-357] Phonebook
+@20
+proc.state.[256-358] Audio
+@20
+proc.state.[256-361] Concertos_Andro
+@20
+proc.state.[256-362] Concertos_Binde
+@20
+proc.state.[256-363] Concertos_Andro
+@20
+proc.state.[256-364] Concertos_Andro
+@20
+proc.state.[256-365] Binder Thread #
+@20
+proc.state.[256-366] Concertos_Andro
+@20
+proc.state.[256-367] Concertos_Andro
+@20
+proc.state.[256-368] Concertos_Andro
+@20
+proc.state.[256-369] Concertos_Andro
+@20
+proc.state.[256-370] Concertos_Andro
+@20
+proc.state.[256-371] Concertos_Andro
+@20
+proc.state.[256-372] Concertos_Andro
+@20
+proc.state.[256-373] Concertos_Exti
+@20
+proc.state.[256-374] Juba monitor
+@20
+proc.state.[256-375] Concertos_iPodN
+@20
+proc.state.[256-377] Concertos_File
+@20
+proc.state.[256-380] Concertos_FileM
+@20
+proc.state.[256-381] Concertos_File
+@20
+proc.state.[256-382] Concertos_Upnp_
+@20
+proc.state.[256-384] REQ_BROWSING
+@20
+proc.state.[256-385] MAPI
+@20
+proc.state.[256-387] MAPIList
+@20
+proc.state.[256-396] RapContext
+@20
+proc.state.[256-397] RapEvent
+@20
+proc.state.[256-398] RapProcedure
+@20
+proc.state.[256-399] Juba monitor
+@20
+proc.state.[256-450] AudioBinder_MED
+@20
+proc.state.[256-451] AudioBinder_PHO
+@20
+proc.state.[256-452] AudioBinder_SON
+@20
+proc.state.[256-453] AudioBinder_TTS
+@20
+proc.state.[256-454] AudioBinder__In
+@20
+proc.state.[256-456] HSTI_WaitCmd
+@20
+proc.state.[256-457] AT0_Connect
+@20
+proc.state.[256-458] AT1_Connect
+@20
+proc.state.[256-459] DUN_Connect
+@20
+proc.state.[256-460] UPNP0_Connect
+@20
+proc.state.[256-461] UPNP0_0_Connect
+@20
+proc.state.[256-462] AIO_Monitor
+@20
+proc.state.[256-466] UPNP_BROWSING
+@20
+proc.state.[256-467] UPNP_DOWNLOAD
+@20
+proc.state.[256-468] UPNP_CONTROLLER
+@20
+proc.state.[256-470] UPnP_TxTP
+@20
+proc.state.[256-471] UPnP_TxTP
+@20
+proc.state.[256-472] UPnP_TxTP
+@20
+proc.state.[256-474] UPnP_TxTP
+@20
+proc.state.[256-478] UPnP_RxTP
+@20
+proc.state.[256-480] UPnP_RxTP
+@20
+proc.state.[256-481] UPnP_RxTP
+@20
+proc.state.[256-482] UPnP_RxTP
+@20
+proc.state.[256-488] UPnP_ProfileTP
+@20
+proc.state.[256-489] UPnP_ProfileTP
+@20
+proc.state.[256-490] UPnP_ProfileTP
+@20
+proc.state.[256-491] UPnP_ProfileTP
+@20
+proc.state.[256-492] UPnP_ProfileTP
+@20
+proc.state.[256-493] UPnP_TxTP
+@20
+proc.state.[256-495] Decoder
+@20
+proc.state.[256-497] MMP_Resampling_
+@20
+proc.state.[256-499] MMP_Sad_Filter
+@20
+proc.state.[256-500] HSTI_Write
+@20
+proc.state.[256-506] VB2 update thre
+@20
+proc.state.[256-508] MMP_VB2_Filter
+@20
+proc.state.[256-510] UPnP_RxTP
+@20
+proc.state.[256-511] MMP_Update_EQ_c
+@20
+proc.state.[256-512] Equalizer
+@20
+proc.state.[256-513] TTS Manager thr
+@20
+proc.state.[256-516] MMP_CSV2_Filter
+@20
+proc.state.[256-517] SoprAsrFrontEnd
+@20
+proc.state.[256-518] SoprAsrBackEnd
+@20
+proc.state.[256-520] Memo Recording
+@20
+proc.state.[256-521] Playback  front
+@20
+proc.state.[256-522] Playback backen
+@20
+proc.state.[256-527] Concertos_LineI
+@20
+proc.state.[256-541] L2CAP_Sender-0
+@20
+proc.state.[256-547] MMP AudioInput 
+@20
+proc.state.[256-548] Blues_Obex_Work
+@20
+proc.state.[256-549] Blues_Obex_Work
+@20
+proc.state.[256-550] Blues_Obex_Work
+@20
+proc.state.[256-551] MMP AudioInput 
+@20
+proc.state.[256-554] Blues_Job_Worke
+@20
+proc.state.[256-570] BT PIM I0
+@20
+proc.state.[256-572] BT PIM I1
+@20
+proc.state.[256-573] BT PIM I2
+@20
+proc.state.[256-710] galileo
+@20
+proc.state.[256-1349] HSTI_Write
+@20
+proc.state.[256-1820] UPnP_AdvTP
+@20
+proc.state.[256-1821] UPnP_AdvTP
+@20
+proc.state.[256-1920] UPnP_AdvTP
+@20
+proc.state.[256-1923] UPnP_AdvTP
+@20
+proc.state.[256-1924] UPnP_AdvTP
+@20
+proc.state.[256-1925] UPnP_AdvTP
+@20
+proc.state.[729-731] sup log
+@20
+proc.state.[729-746] parrotVTK:touch
+@20
+proc.state.[857-857] logwrapper
+@20
+proc.state.[858-858] dhcpcd
+@20
+proc.state.[1299-1299] debuggerd
+@20
+proc.state.[1339-1339] mediaserver
+@20
+proc.state.[1339-1340] android:unnamed
+@20
+proc.state.[1339-1342] ApmCommandThrea
+@20
+proc.state.[1339-1344] sup log
+@20
+proc.state.[1339-1346] HSTI_WaitEvt
+@20
+proc.state.[1339-1347] AIO_Monitor
+@20
+proc.state.[1339-1350] HGI_Notificatio
+@20
+proc.state.[1339-1351] Playback Thread
+@20
+proc.state.[1339-1352] Playback Thread
+@20
+proc.state.[1339-1353] Playback Thread
+@20
+proc.state.[1339-1354] Playback Thread
+@20
+proc.state.[1339-1355] Binder Thread #
+@20
+proc.state.[1339-1356] Binder Thread #
+@20
+proc.state.[1573-1573] flush-ubifs_0_0
+@20
+proc.state.[1588-1588] adbd
+@20
+proc.state.[1620-1620] ash
+@20
+proc.state.[1663-1663] flush-ubifs_0_1
+@20
+proc.state.[1926-1926] lttng
