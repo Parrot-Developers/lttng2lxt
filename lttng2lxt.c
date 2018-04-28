@@ -13,6 +13,8 @@
 int verbose;
 int diag;
 int gtkwave_parrot = 1;
+int show_cpu_switch = 1;
+int do_stats = 0;
 
 static void link_gtkw_file(const char *tracefile, const char *savefile)
 {
@@ -28,8 +30,8 @@ static void link_gtkw_file(const char *tracefile, const char *savefile)
 
 static void usage(void)
 {
-	fprintf(stderr, "\nUsage: lttng2lxt [-v] [-d] [-c] [-e <exefile>] "
-		"<lttng_trace_dir> [<lxtfile> <savefile>]\n");
+	fprintf(stderr, "\nUsage: lttng2lxt [-v] [-d] [-c] [-s] [-a] [-S <stat mask>] [-e <exefile>] "
+		"<lttng_trace_dir> [<outputfile> <savefile>]\n");
 	exit(1);
 }
 
@@ -37,9 +39,10 @@ int main(int argc, char *argv[])
 {
 	int c, ret;
 	char *tracefile;
-	char *lxtfile, *savefile;
+	char *outputfile, *savefile;
+	int rebase_clock = 1;
 
-	while ((c = getopt(argc, argv, "hvdce:")) != -1) {
+	while ((c = getopt(argc, argv, "hvdcse:S:a")) != -1) {
 		switch (c) {
 
 		case 'e':
@@ -58,6 +61,16 @@ int main(int argc, char *argv[])
 			gtkwave_parrot = 1;
 			break;
 
+		case 's':
+			show_cpu_switch = !show_cpu_switch;
+			break;
+
+		case 'S':
+			do_stats = atoi(optarg);
+			break;
+		case 'a':
+			rebase_clock = 0;
+			break;
 		case 'h':
 		default:
 			usage();
@@ -65,28 +78,30 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if ((optind != argc-1) && (argc != argc-3))
+	display_modules();
+
+	if ((optind != argc-1) && (optind != argc-3))
 		usage();
 
 	tracefile = argv[optind];
 
 	if (optind == argc-3) {
-		lxtfile = argv[optind+1];
+		outputfile = argv[optind+1];
 		savefile = argv[optind+2];
 	} else {
 		/* make new names with proper extensions */
 		if (tracefile[strlen(tracefile)-1] == '/')  /* strip last / */
 			tracefile[strlen(tracefile)-1] = 0;
-		ret = asprintf(&lxtfile, "%s.lxt", tracefile);
+		ret = asprintf(&outputfile, "%s.fst", tracefile);
 		assert(ret > 0);
 		ret = asprintf(&savefile, "%s.sav", tracefile);
 		assert(ret > 0);
 	}
 
-	save_dump_init(lxtfile);
+	save_dump_init(outputfile);
 
 	/* do the actual work */
-	scan_lttng_trace(tracefile);
+	scan_lttng_trace(tracefile, rebase_clock);
 
 	/* create a savefile for GTKwave with comments, trace ordering, etc. */
 	write_savefile(savefile);
@@ -95,10 +110,16 @@ int main(int argc, char *argv[])
 
 	save_dump_close();
 
+	fprintf(stdout, "%s: Generated '%s' file\n", argv[0], outputfile);
+
 	if (optind != argc-3) {
-		free(lxtfile);
+		free(outputfile);
 		free(savefile);
 	}
+	if (do_stats & STAT_IRQ)
+		irq_stats();
+	if (do_stats & STAT_SOFTIRQ)
+		softirq_stats();
 
 	unregister_modules();
 	return 0;

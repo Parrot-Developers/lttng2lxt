@@ -3,13 +3,16 @@
 PREFIX  ?=/
 INSTALL = install
 CC	= gcc
-CFLAGS	= -g -Wall -Wextra -Wno-unused-parameter -O3
-HEADERS = lxt_write.h lttng2lxt.h
+LIBDIR  = export_apis
+CFLAGS	= -g -Wall -Wextra -Wno-unused-parameter -O3 -I$(LIBDIR)
+CFLAGS += -Wno-implicit-fallthrough
+HEADERS = lttng2lxt.h $(LIBDIR)/fstapi.h $(LIBDIR)/fastlz.h $(LIBDIR)/lz4.h
 LIBS	= -lbabeltrace-ctf -lbabeltrace -lz -lbz2
 PROGRAM = lttng2lxt
 
-OBJS	= lxt_write.o lttng2lxt.o atag.o symbol.o modules.o savefile.o ctf.o \
-	cpu_idle.o ev_kernel.o ev_task.o ev_userspace.o ev_syscall.o ev_signal.o
+OBJS	= lttng2lxt.o $(LIBDIR)/fstapi.o $(LIBDIR)/fastlz.o $(LIBDIR)/lz4.o \
+	atag.o symbol.o modules.o savefile.o ctf.o \
+	cpu_idle.o ev_kernel.o ev_task.o ev_user.o ev_syscall.o ev_signal.o
 
 all: $(PROGRAM)
 

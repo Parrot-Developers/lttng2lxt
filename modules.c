@@ -21,6 +21,14 @@ static int compar(const void *a, const void *b)
 	return strcmp(ma->name, mb->name);
 }
 
+static int compar_pat(const void *a, const void *b)
+{
+	const struct ltt_module *ma = a;
+	const struct ltt_module *mb = b;
+	return strlen(mb->name) - strlen(ma->name);
+}
+
+
 const struct ltt_module *find_module_by_name(const char *name)
 {
 	int i;
@@ -39,6 +47,29 @@ const struct ltt_module *find_module_by_name(const char *name)
 	return NULL;
 }
 
+static void display_module(const void *nd, const VISIT which, const int depth)
+{
+	struct ltt_module *module = *(struct ltt_module **)nd;
+
+	if (which == leaf || which == postorder)
+		printf("%s\n", module->name);
+}
+
+void display_modules(void)
+{
+	int i;
+
+	printf("LTTng2lxt registered modules : \n");
+	/*Display regular modules*/
+	twalk(modules_root, display_module);
+
+	/*Display pattern-matching modules*/
+	for (i = 0; i < nb_pat_modules; i++)
+		printf("%s\n", pat_modules[i].name);
+
+	printf("\n");
+}
+
 void register_module(const char *name, void (*process)(const char *modname,
 						       int pass,
 						       double clock,
@@ -54,6 +85,8 @@ void register_module(const char *name, void (*process)(const char *modname,
 		assert(pat_modules);
 		pat_modules[nb_pat_modules-1].name = name;
 		pat_modules[nb_pat_modules-1].process = process;
+		qsort(pat_modules, nb_pat_modules, sizeof(*pat_modules),
+			compar_pat);
 	} else {
 		/* store regular modules in a binary tree */
 		module = malloc(sizeof(*module));

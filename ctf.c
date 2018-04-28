@@ -30,10 +30,15 @@ int get_arg(void *args, const char *name, struct arg_value *value)
 	enum ctf_type_id type;
 
 	scope = bt_ctf_get_top_level_scope(ctf_event, BT_EVENT_FIELDS);
+
 	def = bt_ctf_get_field(ctf_event, scope, name);
-	assert(def);
+	if (!def)
+		return -1;
+
 	decl = bt_ctf_get_decl_from_def(def);
-	assert(decl);
+	if (!decl)
+		return -1;
+
 	type = bt_ctf_field_type(decl);
 
 	switch (type) {
@@ -105,21 +110,21 @@ void for_each_arg(void *args,
 
 int64_t get_arg_i64(void *args, const char *name)
 {
-	struct arg_value value;
+	struct arg_value value = {0};
 	(void)get_arg(args, name, &value);
 	return value.i64;
 }
 
 uint64_t get_arg_u64(void *args, const char *name)
 {
-	struct arg_value value;
+	struct arg_value value = {0};
 	(void)get_arg(args, name, &value);
 	return value.u64;
 }
 
 const char *get_arg_str(void *args, const char *name)
 {
-	struct arg_value value;
+	struct arg_value value = {0};
 	(void)get_arg(args, name, &value);
 	return value.s;
 }
@@ -146,10 +151,11 @@ static void process_one_event(struct bt_ctf_event *ctf_event, double clock,
 	if (pass == 2)
 		emit_clock(clock);
 
+	TDIAG("process events", clock, "name=%s cpu=%d pass=%d\n", name, cpu_id, pass);
 	mod->process(name, pass, clock, cpu_id, ctf_event);
 }
 
-static void process_events(struct bt_ctf_iter *iter, int pass)
+static void process_events(struct bt_ctf_iter *iter, int pass, int rebase_clock)
 {
 	int ret;
 	double clock;
@@ -163,6 +169,12 @@ static void process_events(struct bt_ctf_iter *iter, int pass)
 		if (mod) {
 			clock = (double)bt_ctf_get_timestamp(ctf_event)/
 				1000000000.0;
+			if (rebase_clock) {
+				static double clock_base = 0.0;
+ 				if (clock_base == 0.0)
+					clock_base = clock;
+				clock -= clock_base;
+			}
 			process_one_event(ctf_event, clock, mod, name, pass);
 		}
 		ret = bt_iter_next(bt_ctf_get_iter(iter));
@@ -201,11 +213,16 @@ exit:
 	return 0;
 }
 
-void scan_lttng_trace(const char *name)
+void scan_lttng_trace(const char *name, int rebase_clock)
 {
 	struct bt_ctf_iter *iter;
 	struct bt_iter_pos begin_pos;
 	int ret, i;
+
+	/* XXX hack to display missed event */
+	extern int babeltrace_ctf_console_output;
+	babeltrace_ctf_console_output = 1;
+	setenv("TZ", "", 1);
 
 	ctx = bt_context_create();
 	assert(ctx);
@@ -220,7 +237,9 @@ void scan_lttng_trace(const char *name)
 		FATAL("cannot iterate on trace '%s'\n", name);
 
 	INFO("pass 1: initializing modules and converting addresses\n");
-	process_events(iter, 1);
+	process_events(iter, 1, rebase_clock);
+
+	babeltrace_ctf_console_output = 0;
 
 	/* flush address symbol conversion pipe */
 	atag_flush();
@@ -230,7 +249,7 @@ void scan_lttng_trace(const char *name)
 	/* rewind */
 	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &begin_pos);
 	assert(ret == 0);
-	process_events(iter, 2);
+	process_events(iter, 2, rebase_clock);
 
 	bt_ctf_iter_destroy(iter);
 	i = 0;

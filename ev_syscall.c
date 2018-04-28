@@ -35,17 +35,17 @@ static void dump_syscall_arg(void *cookie, const char *name,
 	switch (value->type) {
 	case ARG_I64:
 		if (value->i64 >= 1000000 || value->i64 <= -1000000)
-			snprintf(p, rlen, "%s=0x%08llx", name,
+			snprintf(p, rlen, "%s=0x%08" PRIx64, name,
 				 (uint64_t)value->i64);
 		else
-			snprintf(p, rlen, "%s=%lld", name, value->i64);
+			snprintf(p, rlen, "%s=%" PRIi64, name, value->i64);
 		break;
 
 	case ARG_U64:
 		if (value->u64 >= 1000000)
-			snprintf(p, rlen, "%s=0x%08llx", name, value->u64);
+			snprintf(p, rlen, "%s=0x%08" PRIx64, name, value->u64);
 		else
-			snprintf(p, rlen, "%s=%llu", name, value->u64);
+			snprintf(p, rlen, "%s=%" PRIu64, name, value->u64);
 		break;
 
 	case ARG_STR:
@@ -65,7 +65,8 @@ static void sys_process(const char *modname, int pass, double clock, int cpu,
 	if (pass == 2) {
 		/* dump syscall arguments */
 		for_each_arg(args, dump_syscall_arg, argbuf);
-		snprintf(buf, sizeof(buf), "%s(%s)", &modname[4], argbuf);
+		snprintf(buf, sizeof(buf), "%d: %s(%s)", cpu,
+			 &modname[4], argbuf);
 		task = get_current_task(cpu);
 		if (task) {
 			emit_trace(task->info_trace, (union ltt_value)buf);
@@ -77,9 +78,23 @@ static void sys_process(const char *modname, int pass, double clock, int cpu,
 }
 MODULE_PATTERN(sys, sys_*);
 
+static void compat_syscall_entry_process(const char *modname, int pass, double clock, int cpu, void *args)
+{
+	sys_process(modname + 17, pass, clock, cpu, args);
+}
+MODULE_PATTERN(compat_syscall_entry, compat_syscall_entry_*);
+
+static void syscall_entry_process(const char *modname, int pass, double clock, int cpu, void *args)
+{
+	sys_process(modname + 10, pass, clock, cpu, args);
+}
+MODULE_PATTERN(syscall_entry, syscall_entry_*);
+
 static void exit_syscall_process(const char *modname, int pass, double clock,
 				 int cpu, void *args)
 {
+	int ret;
+	char buf[80];
 	struct task *task;
 
 	if (pass == 1)
@@ -87,16 +102,33 @@ static void exit_syscall_process(const char *modname, int pass, double clock,
 
 	/* pass 2 only */
 
-	/*
-	 * 'ret' is the syscall id, there is no much point showing it
-	 * ret = (int)get_arg_i64(args, "ret");
-	 */
-
 	task = get_current_task(cpu);
 	if (task) {
-		emit_trace(task->info_trace, (union ltt_value)"");
+		/*
+		 * 'ret' is normally the syscall id; or the syscall return
+		 * value if lttng-modules is patched accordingly
+		 */
+		ret = (int)get_arg_i64(args, "ret");
+		snprintf(buf, sizeof(buf), "%d: ret=%d", cpu, ret);
+		emit_trace(task->info_trace, (union ltt_value)buf);
 		task->mode = PROCESS_USER;
 		emit_trace(task->state_trace, (union ltt_value)task->mode);
 	}
 }
 MODULE(exit_syscall);
+
+static void compat_syscall_exit_process(const char *modname, int pass, double clock,
+				 int cpu, void *args)
+{
+	exit_syscall_process(modname, pass, clock, cpu, args);
+}
+
+MODULE_PATTERN(compat_syscall_exit, compat_syscall_exit_*);
+
+static void syscall_exit_process(const char *modname, int pass, double clock,
+				 int cpu, void *args)
+{
+	exit_syscall_process(modname, pass, clock, cpu, args);
+}
+
+MODULE_PATTERN(syscall_exit, syscall_exit_*);

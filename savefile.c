@@ -72,7 +72,8 @@ static void print_group(enum trace_group group, const char *name, FILE *fp,
 				TR_ANALOG_FULLSCALE);
 		}
 
-		fprintf(fp, "@%x\n%s%s\n", flag|TR_RJUSTIFY, tab[i]->name,
+		fprintf(fp, "@%x\n%s.%s%s\n", flag|TR_RJUSTIFY,
+			name, tab[i]->fst_name,
 			(tab[i]->flags == TRACE_SYM_F_U16) ? "[0:15]" : "");
 	}
 }
@@ -100,6 +101,7 @@ void write_savefile(const char *name)
 	print_group(TG_IRQ, "Interrupts", fp, tab);
 	print_group(TG_MM, "Memory Management", fp, tab);
 	print_group(TG_GLOBAL, "Global Info", fp, tab);
+	print_group(TG_USER, "User Info", fp, tab);
 	print_group(TG_PROCESS, "Processes", fp, tab);
 
 	free(tab);

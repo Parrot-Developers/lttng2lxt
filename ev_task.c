@@ -63,6 +63,18 @@ static void update_task(struct task *task, const char *name, int pid, int tgid)
 	}
 }
 
+void emit_state_trace(struct task *task, union ltt_value value, int cpu)
+{
+	char buf[16];
+
+	emit_trace(task->state_trace, value);
+	if (show_cpu_switch && task->current_cpu != cpu) {
+		task->current_cpu = cpu;
+		snprintf(buf, sizeof(buf), "%d", cpu);
+		emit_trace(task->info_trace, (union ltt_value)buf);
+	}
+}
+
 static struct task *new_task(const char *name, int pid)
 {
 	struct task *task;
@@ -85,6 +97,7 @@ static struct task *new_task(const char *name, int pid)
 	task->state_trace = &data[0];
 	task->info_trace  = &data[1];
 	task->mode = PROCESS_KERNEL;
+	task->current_cpu = -1;
 
 	init_trace(task->state_trace, TG_PROCESS,
 		   1.0 + (task->tgid << 16) + task->pid,
@@ -190,7 +203,7 @@ void lttng_statedump_process_state_process(const char *modname, int pass,
 			value = (union ltt_value)PROCESS_DEAD;
 			break;
 		}
-		emit_trace(task->state_trace, value);
+		emit_state_trace(task, value, cpu);
 	}
 }
 MODULE(lttng_statedump_process_state);
@@ -212,6 +225,12 @@ static void sched_switch_process(const char *modname, int pass, double clock,
 	next_comm = get_arg_str(args, "next_comm");
 	next_tid = (int)get_arg_u64(args, "next_tid");
 
+	/* hack to have different line for per cpu idle */
+	if (prev_tid == 0)
+		prev_tid = -cpu;
+	if (next_tid == 0)
+		next_tid = -cpu;
+
 	if (pass == 1) {
 		find_or_add_task(prev_comm, prev_tid);
 		find_or_add_task(next_comm, next_tid);
@@ -222,21 +241,20 @@ static void sched_switch_process(const char *modname, int pass, double clock,
 
 		/* restore idle state only if prev process is not dead */
 		if (!(prev_state & 0x70 /*XXX*/))
-			emit_trace(task->state_trace,
-				   (union ltt_value)PROCESS_IDLE);
+			emit_state_trace(task, (union ltt_value)PROCESS_IDLE,
+					 cpu);
 		else
-			emit_trace(task->state_trace,
-				   (union ltt_value)PROCESS_DEAD);
-
-		if (prev_tid == 0)
-			set_cpu_idle(clock, cpu);
+			emit_state_trace(task, (union ltt_value)PROCESS_DEAD,
+					 cpu);
 
 		/* emit state of newly scheduled task */
 		task = find_or_add_task(NULL, next_tid);
-		emit_trace(task->state_trace, (union ltt_value)task->mode);
+		emit_state_trace(task, (union ltt_value)task->mode, cpu);
 		current_task[cpu] = task;
 
-		if (next_tid == 0)
+		if (next_tid <= 0)
+			set_cpu_idle(clock, cpu);
+		else
 			set_cpu_running(clock, cpu);
 	}
 }
@@ -258,7 +276,7 @@ static void sched_wakeup_process(const char *modname, int pass, double clock,
 
 	if (pass == 2) {
 		task = find_or_add_task(NULL, tid);
-		emit_trace(task->state_trace, (union ltt_value)PROCESS_WAKEUP);
+		emit_state_trace(task, (union ltt_value)PROCESS_WAKEUP, cpu);
 	}
 }
 MODULE(sched_wakeup);
@@ -290,7 +308,7 @@ static void sched_process_wait_process(const char *modname, int pass,
 
 	if (pass == 2) {
 		task = find_or_add_task(NULL, tid);
-		emit_trace(task->state_trace, (union ltt_value)PROCESS_IDLE);
+		emit_state_trace(task, (union ltt_value)PROCESS_IDLE, cpu);
 	}
 }
 MODULE(sched_process_wait);
@@ -315,7 +333,7 @@ static void sched_process_free_process(const char *modname, int pass,
 
 	if (pass == 2) {
 		task = find_or_add_task(NULL, tid);
-		emit_trace(task->state_trace, (union ltt_value)PROCESS_DEAD);
+		emit_state_trace(task, (union ltt_value)PROCESS_DEAD, cpu);
 	}
 }
 MODULE(sched_process_free);

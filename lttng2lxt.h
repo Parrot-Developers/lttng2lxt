@@ -25,6 +25,7 @@
 #include <getopt.h>
 #include <search.h>
 #include <fnmatch.h>
+#include <inttypes.h>
 
 enum {
 	TRACE_SYM_F_BITS,
@@ -45,6 +46,7 @@ enum {
 #define LT_S0                     "x"
 #define LT_S1                     "u"
 #define LT_S2                     "w"
+#define LT_S3                     "-"
 #define LT_IDLE                   "z"
 #define LT_1                      "1"
 #define LT_0                      "0"
@@ -56,6 +58,7 @@ enum {
 #define PROCESS_KERNEL            (gtkwave_parrot ? LT_S0 : LT_1)
 #define PROCESS_USER              (gtkwave_parrot ? LT_S1 : LT_S0)
 #define PROCESS_WAKEUP            (gtkwave_parrot ? LT_S2 : LT_0)
+#define PROCESS_PREEMPTED         (gtkwave_parrot ? LT_S3 : LT_0)
 #define PROCESS_DEAD              LT_0
 
 enum trace_group {
@@ -63,6 +66,7 @@ enum trace_group {
 	TG_IRQ,
 	TG_MM,
 	TG_GLOBAL,
+	TG_USER,
 	TG_PROCESS,
 };
 
@@ -75,10 +79,12 @@ union ltt_value {
 
 struct ltt_trace {
 	void             *sym;
+	int               fst_handle;
 	uint32_t          flags;
 	enum trace_group  group;
 	double            pos;
 	const char       *name;
+	const char       *fst_name; /* fst allowed chars only */
 	int               emitted;
 	struct ltt_trace *next;
 	/* XXX alow to save the task state before cs. should be done
@@ -102,6 +108,7 @@ struct task {
 	struct ltt_trace  *info_trace;
 	const char        *mode;
 	char              *name;
+	int                current_cpu;
 };
 
 enum arg_type {
@@ -170,7 +177,16 @@ struct ltt_module {
 extern int verbose;
 extern int diag;
 extern int gtkwave_parrot;
+extern int show_cpu_switch;
+extern int do_stats;
+enum {
+	STAT_IRQ = 1,
+	STAT_SOFTIRQ = 2,
+};
 extern int atag_enabled;
+
+void irq_stats(void);
+void softirq_stats(void);
 
 void atag_init(const char *name);
 char *atag_get(uint32_t addr);
@@ -205,9 +221,10 @@ void register_module(const char *name, void (*process)(const char *modname,
 						       int cpu,
 						       void *args));
 void unregister_modules(void);
+void display_modules(void);
 
 void write_savefile(const char *name);
-void scan_lttng_trace(const char *name);
+void scan_lttng_trace(const char *nam, int rebase_clock);
 
 int get_arg(void *args, const char *name, struct arg_value *value);
 int64_t get_arg_i64(void *args, const char *name);
@@ -223,6 +240,7 @@ void set_cpu_idle(double clock, int cpu);
 void set_cpu_running(double clock, int cpu);
 void cpu_preempt(double clock, int cpu);
 void cpu_unpreempt(double clock, int cpu);
+void init_cpu(int cpu);
 
 void symbol_clean_name(char *name);
 

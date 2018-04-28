@@ -33,13 +33,14 @@ static const char * const signal_name[] = {
 	[20] = "TSTP",
 };
 
-static void emit_signal(struct task *task, int sig)
+static void emit_signal(struct task *task, int sig, int cpu)
 {
 	const char *name = "NAL";
 
 	if ((sig < (int)ARRAY_SIZE(signal_name)) && (signal_name[sig]))
 		name = signal_name[sig];
-	emit_trace(task->info_trace, (union ltt_value)"SIG%s(%d)", name, sig);
+	emit_trace(task->info_trace, (union ltt_value)"%d: SIG%s(%d)", cpu,
+		   name, sig);
 }
 
 static void signal_generate_process(const char *modname, int pass,
@@ -59,7 +60,7 @@ static void signal_generate_process(const char *modname, int pass,
 		sig = (int)get_arg_u64(args, "sig");
 		task = find_or_add_task(NULL, pid);
 		if (task)
-			emit_signal(task, sig);
+			emit_signal(task, sig, cpu);
 	}
 }
 MODULE(signal_generate);
@@ -74,7 +75,7 @@ static void signal_deliver_process(const char *modname, int pass,
 		sig = (int)get_arg_u64(args, "sig");
 		task = get_current_task(cpu);
 		if (task)
-			emit_signal(task, sig);
+			emit_signal(task, sig, cpu);
 	}
 }
 MODULE(signal_deliver);
